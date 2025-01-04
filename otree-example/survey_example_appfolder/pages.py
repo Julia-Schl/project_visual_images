@@ -8,8 +8,16 @@ from .models import Constants, Player
 #more functionality added here but this is a good start. 
 
 class Welcome(Page):
+    pass
+
+class Politician1_competence(Page):
     form_model = Player
-    form_fields = ['entry_question']
+    form_fields = ["popout_question_competence"]
+
+class Politician2_femininity(Page):
+    form_model = Player
+    form_fields = ["popout_question_femininity"]
+
 
 class DemoPage(Page):
     form_model = Player
@@ -21,5 +29,7 @@ class EndPage(Page):
 
 #Here we define in which ordering we want the pages to be shown. We always start with a Welcome page and end with an End page.
 page_sequence = [Welcome,
+                Politician1_competence,
+                Politician2_femininity,
                 DemoPage,           
                 EndPage]

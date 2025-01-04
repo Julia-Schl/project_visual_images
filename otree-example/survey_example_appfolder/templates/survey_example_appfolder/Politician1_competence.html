@@ -1,0 +1,67 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<br>
+<h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
+    <hr>
+    Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.
+    <hr>
+    <!-- This is the most basic way of implementing an input field -->
+    <img   width="50%" height="50%" src="{% static 'pol_1.png' %}" />
+    <br>
+
+<!-- Hidden popout question initially -->
+    <div id="popout-question" style="display: none;">
+        <p>Wie schätzen Sie die Kompetenz dieser Politikerin ein?</p>
+
+        <!-- Form for the answer choices -->
+        <form method="post">
+
+            <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin: auto;">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;"></th>
+                        <th style="padding: 10px; font-size: 16px;">1</th>
+                        <th style="padding: 10px; font-size: 16px;">2</th>
+                        <th style="padding: 10px; font-size: 16px;">3</th>
+                        <th style="padding: 10px; font-size: 16px;">4</th>
+                        <th style="padding: 10px; font-size: 16px;">5</th>
+                        <th style="width: 20%;"></th>
+                        <th style="padding: 10px; font-size: 16px;">Keine Eingabe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: right;">Überhaupt nicht kompetent</td>
+                        <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
+                        <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
+                        <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
+                        <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
+                        <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
+                        <td style="text-align: left;">Sehr kompetent</td>
+                        <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-errors">
+                {{ formfield_errors 'popout_question_competence' }}
+            </div>
+
+            <button class="otree-btn-next btn btn-primary">Weiter</button>
+        </form>
+    </div>
+
+    <!-- Add JavaScript to show the popout after 3 seconds -->
+    <script>
+        setTimeout(function() {
+            // Show the popout question after 3 seconds
+            document.getElementById("popout-question").style.display = "block";
+        }, 3000);  // 3000 milliseconds = 3 seconds
+    </script>
+{% endblock %}
