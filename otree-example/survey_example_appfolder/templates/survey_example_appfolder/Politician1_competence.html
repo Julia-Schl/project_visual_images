@@ -13,41 +13,37 @@
     <hr>
     <!-- create a image path variable-->
     <script>
-        // Fetch player group
+        //fetch player group
         var playerGroup = {{ player.group_assignment }};
         console.log(playerGroup);
         
-        // Define available pictures for each group
+        //define dict with all availale pictures (we have to change this part as soon as we now how alle the pictres are actually named)
         var groupPictures = {
-            0: ['P_1.jpg', 'P_2.jpg'],
-            1: ['P_3.jpg', 'P_4.jpg'],
-            2: ['P_5.jpg', 'P_6.jpg'],
-            3: ['P_7.jpg', 'P_8.jpg']
+            0: ["1", "2"],
+            1: ["3", "4"],
+            2: ["5", "6"],
+            3: ["7", "8"]
         };
         console.log(groupPictures);
     
-        // Select a random picture from the available pictures for the player's group
+        //select a random image from the player group
         var availablePictures = groupPictures[playerGroup];
-        var randomIndex = Math.floor(Math.random() * availablePictures.length);
-        var selectedPicture = availablePictures[randomIndex];
-        console.log(selectedPicture);
+        var randomNum = Math.floor(Math.random() * availablePictures.length);
+        var displayedPicture = availablePictures[randomNum];
+        console.log(displayedPicture);
     
-        // Hardcoded static URL path
-        var staticPath = "/static/Group_" + playerGroup + "/";
-
-        // Dynamically generate the image path
-        var imagePath = staticPath + selectedPicture;
+        //construct path to the image 
+        //construct the first part 
+        var imagePath = "/static/Group_" + playerGroup + "/" + "P_" + displayedPicture + ".jpg";
         console.log(imagePath);
 
     </script>
 
- 
     <!-- Create empty image container -->
     <img id="politician" width="50%" height="50%" src="" />
     
     <script>
-        
-        // Set the image path dynamically
+        //insert the constructed path 
         document.getElementById("politician").src = imagePath;
     </script>
     <br>

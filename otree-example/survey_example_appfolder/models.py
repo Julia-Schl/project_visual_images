@@ -15,9 +15,11 @@ author = 'Richard Neureuther, Julia Schleißheimer, Mariia Pyvovar'
 doc = 'This is the app for the Candidates Pictures group of the "Designing and implementing online survey experiments" seminar.'
 
 class Constants(BaseConstants):
-    name_in_url = 'survey-example'
+    name_in_url = 'politician-pictures'
     players_per_group = None
     num_rounds = 1
+
+    
 
 class Subsession(BaseSubsession):
         
