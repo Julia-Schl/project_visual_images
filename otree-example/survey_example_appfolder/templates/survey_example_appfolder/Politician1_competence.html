@@ -11,8 +11,45 @@
     <hr>
     <b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.</b>
     <hr>
-    <!-- This is the most basic way of implementing an input field -->
-    <img   width="50%" height="50%" src="{% static 'Group_1/P_1.jpg' %}" />
+    <!-- create a image path variable-->
+    <script>
+        // Fetch player group
+        var playerGroup = {{ player.group_assignment }};
+        console.log(playerGroup);
+        
+        // Define available pictures for each group
+        var groupPictures = {
+            0: ['P_1.jpg', 'P_2.jpg'],
+            1: ['P_3.jpg', 'P_4.jpg'],
+            2: ['P_5.jpg', 'P_6.jpg'],
+            3: ['P_7.jpg', 'P_8.jpg']
+        };
+        console.log(groupPictures);
+    
+        // Select a random picture from the available pictures for the player's group
+        var availablePictures = groupPictures[playerGroup];
+        var randomIndex = Math.floor(Math.random() * availablePictures.length);
+        var selectedPicture = availablePictures[randomIndex];
+        console.log(selectedPicture);
+    
+        // Hardcoded static URL path
+        var staticPath = "/static/Group_" + playerGroup + "/";
+
+        // Dynamically generate the image path
+        var imagePath = staticPath + selectedPicture;
+        console.log(imagePath);
+
+    </script>
+
+ 
+    <!-- Create empty image container -->
+    <img id="politician" width="50%" height="50%" src="" />
+    
+    <script>
+        
+        // Set the image path dynamically
+        document.getElementById("politician").src = imagePath;
+    </script>
     <br>
     <br>
     <br>
