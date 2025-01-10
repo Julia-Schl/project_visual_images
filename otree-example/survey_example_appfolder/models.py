@@ -8,9 +8,11 @@ from otree.api import (
     Currency as c,
     currency_range,
 )
+#import random for group assignment
+import random 
 
-author = 'your names and team objective go here'
-doc = 'Your app description goes here'
+author = 'Richard Neureuther, Julia Schleißheimer, Mariia Pyvovar'
+doc = 'This is the app for the Candidates Pictures group of the "Designing and implementing online survey experiments" seminar.'
 
 class Constants(BaseConstants):
     name_in_url = 'survey-example'
@@ -18,7 +20,19 @@ class Constants(BaseConstants):
     num_rounds = 1
 
 class Subsession(BaseSubsession):
-    pass
+        
+         def creating_session(self):
+
+            #fetch players
+            players = self.get_players()
+            #if we want we can shuffle the players to be more randomly distributed among groups:
+            #random.shuffle(players)
+
+            #randomly assign a group to each participant
+            num_groups = 4 
+            for i, p in enumerate(players):
+                p.group_assignment = i % num_groups
+
 
 class Group(BaseGroup):
     #we will only come to the group class when we look at advanced methods
@@ -26,9 +40,10 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    #this is the most important feature of this file. We can collect all the variables used on the html pages here
+    #variable for group assignment
+    group_assignment = models.IntegerField(initial=-1)
     
-#The Variables are structured on the base of pages
+    #The Variables are structured on the base of pages
     popout_question_competence = models.IntegerField(
         initial=-999,
         choices =[
