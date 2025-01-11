@@ -17,6 +17,7 @@ class Politician1_competence(Page):
 class Politician2_femininity(Page):
     form_model = Player
     form_fields = ["popout_question_femininity"]
+    
 
 
 class DemoPage(Page):

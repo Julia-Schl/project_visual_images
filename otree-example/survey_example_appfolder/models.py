@@ -19,6 +19,14 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
 
+        # Global dictionary for group pictures
+    groupPictures = {
+        0: ["1", "2"],
+        1: ["3", "4"],
+        2: ["5", "6"],
+        3: ["7", "8"]
+    }
+
     
 
 class Subsession(BaseSubsession):
@@ -34,6 +42,7 @@ class Subsession(BaseSubsession):
             num_groups = 4 
             for i, p in enumerate(players):
                 p.group_assignment = i % num_groups
+                
 
 
 class Group(BaseGroup):
