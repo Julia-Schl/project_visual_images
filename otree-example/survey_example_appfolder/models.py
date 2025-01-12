@@ -66,24 +66,10 @@ class Player(BasePlayer):
     group_assignment = models.IntegerField(initial=-1)
 
     #variable for picture assignment
-    picture_assignment_1 = models.IntegerField(initial=-1)
-    picture_assignment_2 = models.IntegerField(initial=-1)
+    picture_assignment = models.IntegerField(initial=-1)
     
     #The Variables are structured on the base of pages
-    popout_question_competence_1 = models.IntegerField(
-        initial=-999,
-        choices =[
-            (1, '1'),
-            (2, '2'),
-            (3, '3'),
-            (4, '4'),
-            (5, '5'),
-            (-1, 'Keine Angabe')
-        ],
-        label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"
-    )
-
-    popout_question_competence_2 = models.IntegerField(
+    popout_question_competence = models.IntegerField(
         initial=-999,
         choices =[
             (1, '1'),
