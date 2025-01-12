@@ -3,27 +3,27 @@
 
 
 {% block title %}
+<h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
+    <hr>
 {% endblock %}
 
 {% block content %}
 <br>
-<h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
-    <hr>
     <b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.</b>
-    <hr>
-    <!-- create a image path variable-->
-     
+
+    <!-- create an image path variable-->
+
     <script>
         //fetch player group
-        var playerGroup = {{ player.group_assignment }};
+        var playerGroup = {{ player_group }};
         console.log(playerGroup);
         
         //import dict from the constants (we have to change this part as soon as we now how all the pictres are actually named)
-        var groupPictures = {{ Constants.groupPictures}};
-        console.log(groupPictures);
+        //var groupPictures = {{Constants.groupPictures}};
+        //console.log(groupPictures);
     
         //select a random image from using the group of the player
-        var availablePictures = groupPictures[playerGroup];
+        var availablePictures = {{ available_pictures | safe }};
         var randomNum = Math.floor(Math.random() * availablePictures.length);
         var displayedPicture = availablePictures[randomNum];
         console.log(displayedPicture);
@@ -31,8 +31,19 @@
         //construct path to the image 
         var imagePath = "/static/Group_" + playerGroup + "/" + "P_" + displayedPicture + ".jpg";
         console.log(imagePath);
-
+        
+        //picture_assignment = displayedPicture;
     </script>
+
+    <!-- Hidden input field for the picture assignment --> 
+    <input id="picture_assignment" type="hidden" name="{{ picture_field }}" value="{{ current_picture }}"/>
+
+    <script>
+        // Set the hidden input value with the selected picture
+        document.querySelector('input[name="{{ picture_field }}"]').value = displayedPicture;
+        console.log("Updating hidden input for picture assignment:", displayedPicture);
+    </script>
+
 
     <!-- Create empty image container -->
     <img id="politician" width="50%" height="50%" src="" />
@@ -69,19 +80,19 @@
                 <tbody>
                     <tr>
                         <td style="text-align: right;">Überhaupt nicht kompetent</td>
-                        <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="1" {% if field_value == 1 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="2" {% if field_value == 2 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="3" {% if field_value == 3 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="4" {% if field_value == 4 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="5" {% if field_value == 5 %} checked {% endif %}></td>
                         <td style="text-align: left;">Sehr kompetent</td>
-                        <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
+                        <td><input type="radio" name="{{ field_name }}" value="-1" {% if field_value == -1 %} checked {% endif %}></td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="form-errors">
-                {{ formfield_errors 'popout_question_competence' }}
+                {{ formfield_errors field_name }}
             </div>
 
             <button class="otree-btn-next btn btn-primary">Weiter</button>
