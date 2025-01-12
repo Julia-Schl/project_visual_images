@@ -12,8 +12,9 @@ class Welcome(Page):
         #return self.num_rounds == 1
     pass
 
-class Politician1_competence(Page):
+class Page1(Page):
     form_model = 'player' 
+
 
     # Dynamically set form_fields
     def get_form_fields(self):
@@ -26,6 +27,7 @@ class Politician1_competence(Page):
     # Pass dynamic variables to the template
     def vars_for_template(self):
         if self.round_number == 1:
+
             return {
                 'field_name': 'popout_question_competence_1',
                 'field_value': self.player.popout_question_competence_1,
@@ -76,4 +78,4 @@ class EndPage(Page):
                 #EndPage]
 
 page_sequence = [Welcome, 
-                Politician1_competence]
+                Page1]
