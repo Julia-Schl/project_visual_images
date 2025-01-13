@@ -33,6 +33,8 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             players = self.get_players()
+            # if we want we can shuffle the players to be more randomly distributed among groups:
+            # random.shuffle(players)
             num_groups = 4
             for i, p in enumerate(players):
                 p.group_assignment = i % num_groups
@@ -42,20 +44,6 @@ class Subsession(BaseSubsession):
             for p in self.get_players():
                 p.group_assignment = p.in_round(1).group_assignment
         
-         #def creating_session(self):
-
-            # fetch players
-            #players = self.get_players()
-            # if we want we can shuffle the players to be more randomly distributed among groups:
-            # random.shuffle(players)
-
-            # randomly assign a group to each participant
-            #num_groups = 4 
-            #for i, p in enumerate(players):
-                #p.group_assignment = i % num_groups
-                
-
-
 class Group(BaseGroup):
     #we will only come to the group class when we look at advanced methods
     pass
