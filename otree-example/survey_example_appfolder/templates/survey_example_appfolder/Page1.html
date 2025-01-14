@@ -1,111 +1,68 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-
 {% block title %}
 <h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
-    <hr>
+<hr>
 {% endblock %}
 
 {% block content %}
 <br>
-    <b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.</b>
+<b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.</b>
 
-    <!-- create an image path variable-->
+<!-- access the image path variable and display the correct picture  -->
+<img id="politician" width="50%" height="50%" src="{{ image_path }}" />
 
-    <script>
-        //fetch player group
-        var playerGroup = {{ player.group_assignment }};
-        console.log(playerGroup);
-        
-        //import dict from the constants (we have to change this part as soon as we now how all the pictres are actually named)
-        var groupPictures = {{Constants.groupPictures}};
-        console.log(groupPictures);
-    
-        //select a random image from using the group of the player
-        var availablePictures = groupPictures[playerGroup];
-        var randomNum = Math.floor(Math.random() * availablePictures.length);
-        var displayedPicture = availablePictures[randomNum];
-        console.log(displayedPicture);
-    
-        //construct path to the image 
-        var imagePath = "/static/Group_" + playerGroup + "/" + "P_" + displayedPicture + ".jpg";
-        console.log(imagePath);
-        
-    </script>
-   
+<!-- Hidden input field for the picture assignment  -->
+<input id="picture_assignment" type="hidden" name="picture_assignment" value="{{ assigned_picture }}" />
 
-    <!-- Hidden input field for the picture assignment --> 
-    <input id="picture_assignment" type="hidden" name="picture_assignment" />
-
-    <script>
-        // Set the hidden input value with the selected picture
-        document.getElementById('picture_assignment').value = displayedPicture;
-        console.log("Updating hidden input for picture assignment:", displayedPicture);
-    </script>
-
-    <div class="form-errors">
-        {{ formfield_errors 'picture_assignment' }}
-    </div>
-
-
-    <!-- Create empty image container -->
-    <img id="politician" width="50%" height="50%" src="" />
-    
-    <script>
-        //insert the constructed path 
-        document.getElementById("politician").src = imagePath;
-    </script>
-    <br><br><br>
+<br><br><br>
 
 <!-- Hidden popout question initially -->
-    <div id="popout-question" style="display: none;">
-        <br>
-        <p><b>Wie schätzen Sie die Kompetenz dieser Politikerin ein?</b></p>
+<div id="popout-question" style="display: none;">
+    <br>
+    <p><b>Wie schätzen Sie die Kompetenz dieser Politikerin ein?</b></p>
 
-        <!-- Form for the answer choices -->
-        <form method="post">
+    <form method="post">
+        <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 20%;"></th>
+                    <th style="padding: 10px; font-size: 16px;">1</th>
+                    <th style="padding: 10px; font-size: 16px;">2</th>
+                    <th style="padding: 10px; font-size: 16px;">3</th>
+                    <th style="padding: 10px; font-size: 16px;">4</th>
+                    <th style="padding: 10px; font-size: 16px;">5</th>
+                    <th style="width: 20%;"></th>
+                    <th style="padding: 10px; font-size: 16px;">Keine Eingabe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Überhaupt nicht kompetent</td>
+                    <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
+                    <td style="text-align: left;">Sehr kompetent</td>
+                    <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
+                </tr>
+            </tbody>
+        </table>
 
-            <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed;">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;"></th>
-                        <th style="padding: 10px; font-size: 16px;">1</th>
-                        <th style="padding: 10px; font-size: 16px;">2</th>
-                        <th style="padding: 10px; font-size: 16px;">3</th>
-                        <th style="padding: 10px; font-size: 16px;">4</th>
-                        <th style="padding: 10px; font-size: 16px;">5</th>
-                        <th style="width: 20%;"></th>
-                        <th style="padding: 10px; font-size: 16px;">Keine Eingabe</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="text-align: right;">Überhaupt nicht kompetent</td>
-                        <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
-                        <td style="text-align: left;">Sehr kompetent</td>
-                        <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="form-errors">
+            {{ formfield_errors 'popout_question_competence' }}
+        </div>
 
-            <div class="form-errors">
-                {{ formfield_errors 'popout_question_competence' }}
-            </div>
+        <button class="otree-btn-next btn btn-primary">Weiter</button>
+    </form>
+</div>
 
-            <button class="otree-btn-next btn btn-primary">Weiter</button>
-        </form>
-    </div>
-
-    <!-- Add JavaScript to show the popout after 3 seconds -->
-    <script>
-        setTimeout(function() {
-            // Show the popout question after 3 seconds
-            document.getElementById("popout-question").style.display = "block";
-        }, 3000);  // 3000 milliseconds = 3 seconds
-    </script>
+<script>
+    // Show the popout question after 3 seconds
+    setTimeout(function() {
+        document.getElementById("popout-question").style.display = "block";
+    }, 3000);  // 3000 milliseconds = 3 seconds
+</script>
 {% endblock %}
