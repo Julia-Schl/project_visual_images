@@ -25,6 +25,15 @@ class Constants(BaseConstants):
         2: ["5", "6"],
         3: ["7", "8"]
     }
+
+    ## full dictionary with all groups and pictures so you dont have to type it out again :)
+    '''
+    groupPictures = {
+        0: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
+        1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
+        2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
+        3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
+    '''
     
 
 class Subsession(BaseSubsession):
