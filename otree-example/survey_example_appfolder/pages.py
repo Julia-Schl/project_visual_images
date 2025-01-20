@@ -44,7 +44,7 @@ class Page1(Page):
         return 1 <= self.round_number <= 10
 
 
-class Politician2_femininity(Page):
+class Page2(Page):
     form_model = Player
     form_fields = ["popout_question_femininity"]
 
@@ -71,7 +71,7 @@ class EndPage(Page):
 page_sequence = [
     Welcome,
     Page1,
-    Politician2_femininity,
+    Page2,
     DemoPage,
     EndPage
 ]
