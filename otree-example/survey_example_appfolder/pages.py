@@ -45,11 +45,35 @@ class Page1(Page):
 
 
 class Page2(Page):
-    form_model = Player
-    form_fields = ["popout_question_femininity"]
+    form_model = 'player'
+    form_fields = ["popout_question_femininity", "picture_assignment_femininity"]
+
+    def vars_for_template(self):
+        print(f"Player ID: {self.player.id_in_group}, Group Assignment Fem: {self.player.group_assignment_fem}")
+        # Fetch the femininity pictures from session.vars
+        femininity_pictures = self.session.vars.get('femininity_pictures', {})
+
+        # Access the available femininity pictures for the current player's group
+        player_group = self.player.group_assignment_fem
+        available_femininity_pictures = femininity_pictures.get(player_group, [])
+
+        # Get the assigned femininity picture
+        assigned_femininity_picture = self.player.picture_assignment_femininity
+
+        # Construct the image path dynamically
+        image_path_fem =  f"/static/Group_{self.player.group_assignment_fem}/P_{assigned_femininity_picture}.png"
+
+        # Send the variables to the HTML page
+        return {
+            'femininity_pictures': available_femininity_pictures,
+            'assigned_femininity_picture': assigned_femininity_picture,
+            'image_path_fem': image_path_fem
+        }
 
     def is_displayed(self):
         return 11 <= self.round_number <= 20
+        
+
 
 
 class DemoPage(Page):
@@ -72,6 +96,5 @@ page_sequence = [
     Welcome,
     Page1,
     Page2,
-    DemoPage,
     EndPage
 ]

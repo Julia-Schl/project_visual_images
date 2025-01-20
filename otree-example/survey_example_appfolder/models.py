@@ -24,12 +24,13 @@ class Constants(BaseConstants):
         1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
         2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
+    '''
     femininityPictures = {
         2: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
         3: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
         0: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         1: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]} 
-    
+    '''
 
 class Subsession(BaseSubsession):
 
@@ -37,59 +38,121 @@ class Subsession(BaseSubsession):
         # fetch all players
         players = self.get_players()
 
-        # if it is the first round 
-        if self.round_number == 1:
-            #define number of groups and create empty dict
-            num_groups = 4
-            group_pictures = {}
-            #iterate over players 
-            for i, p in enumerate(players):
-                #assign player into group
-                p.group_assignment = i % num_groups
+        if 1 <= self.round_number <= 10:
+            # if it is the first round 
+            if self.round_number == 1:
+                #define number of groups and create empty dict
+                num_groups = 4
+                group_pictures = {}
+                #iterate over players 
+                for i, p in enumerate(players):
+                    #assign player into group
+                    p.group_assignment = i % num_groups
 
-                #initialize a dict for the player from the group Pictures dict
-                group_pictures[p.group_assignment] = Constants.groupPictures.get(p.group_assignment, [])
-                
-                #create individual copy of the global dict for the player 
-                available_pictures = group_pictures[p.group_assignment][:]
-                p.set_player_pictures({"available_pictures": available_pictures})
+                    #initialize a dict for the player from the group Pictures dict
+                    group_pictures[p.group_assignment] = Constants.groupPictures.get(p.group_assignment, [])
+                    
+                    #create individual copy of the global dict for the player 
+                    available_pictures = group_pictures[p.group_assignment][:]
+                    p.set_player_pictures({"available_pictures": available_pictures})
 
-                #randomly select a pciture ID form the dict 
-                random_picture = random.choice(available_pictures)
-                p.picture_assignment = random_picture 
-                print(f"Picture in round {self.round_number}: {random_picture}")
-
-                #remove selected pic from the player dict 
-                available_pictures.remove(random_picture)
-                p.set_player_pictures({"available_pictures": available_pictures})
-                print(f"state of dict in round {self.round_number}:{available_pictures}")
-
-        #if it is not the first round 
-        elif self.round_number > 1 and self.round_number < 11:
-            # Carry over group assignment and picture assignment for subsequent rounds
-            for p in self.get_players():
-                p.group_assignment = p.in_round(1).group_assignment  # Group assignment stays constant
-                
-                # Fetch pictures from the previous round dynamically
-                previous_round = self.round_number - 1
-                previous_pictures = p.in_round(previous_round).get_player_pictures()
-                p.set_player_pictures(previous_pictures)
-
-            # Select a new random picture
-            for p in self.get_players():
-                available_pictures = p.get_player_pictures().get("available_pictures", [])
-                if available_pictures:  # Ensure there are pictures left
+                    #randomly select a pciture ID form the dict 
                     random_picture = random.choice(available_pictures)
-                    p.picture_assignment = random_picture
+                    p.picture_assignment = random_picture 
                     print(f"Picture in round {self.round_number}: {random_picture}")
 
-                    # Remove the selected picture and update the player's available pictures
+                    #remove selected pic from the player dict 
                     available_pictures.remove(random_picture)
                     p.set_player_pictures({"available_pictures": available_pictures})
-                    print(f"State of dict in round {self.round_number}: {available_pictures}")
-                else:
-                    print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
+                    print(f"state of dict in round {self.round_number}:{available_pictures}")
 
+            #if it is not the first round 
+            elif self.round_number > 1 and self.round_number < 11:
+                # Carry over group assignment and picture assignment for subsequent rounds
+                for p in self.get_players():
+                    p.group_assignment = p.in_round(1).group_assignment  # Group assignment stays constant
+                    
+                    # Fetch pictures from the previous round dynamically
+                    previous_round = self.round_number - 1
+                    previous_pictures = p.in_round(previous_round).get_player_pictures()
+                    p.set_player_pictures(previous_pictures)
+
+                # Select a new random picture
+                for p in self.get_players():
+                    available_pictures = p.get_player_pictures().get("available_pictures", [])
+                    if available_pictures:  # Ensure there are pictures left
+                        random_picture = random.choice(available_pictures)
+                        p.picture_assignment = random_picture
+                        print(f"Picture in round {self.round_number}: {random_picture}")
+
+                        # Remove the selected picture and update the player's available pictures
+                        available_pictures.remove(random_picture)
+                        p.set_player_pictures({"available_pictures": available_pictures})
+                        print(f"State of dict in round {self.round_number}: {available_pictures}")
+                    else:
+                        print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
+        
+        # For rounds 11-20, use PicturesFemininity
+        elif 11 <= self.round_number <= 20:
+            if self.round_number == 11:
+                femininity_pictures = {}
+
+                for i, p in enumerate(players):
+                    p.group_assignment = p.in_round(1).group_assignment
+                    p.group_assignment_fem = p.group_assignment
+
+                    if p.group_assignment == 0:
+                        group_assignment_fem = 2
+                    elif p.group_assignment == 1:
+                        group_assignment_fem = 3
+                    elif p.group_assignment == 2:
+                        group_assignment_fem = 0
+                    elif p.group_assignment == 3:
+                        group_assignment_fem = 1
+
+                    # Assign group_assignment_fem to the player if needed
+                    p.group_assignment_fem = group_assignment_fem
+                    print(f"Group Assignment Fem: {p.group_assignment_fem}")
+
+                    # Initialize PicturesFemininity for each player
+                    femininity_pictures[p.group_assignment_fem] = Constants.groupPictures.get(p.group_assignment_fem, [])
+                    available_femininity_pictures = femininity_pictures[p.group_assignment_fem][:]
+                    p.set_player_pictures({"available_femininity_pictures": available_femininity_pictures})
+
+                    # Randomly assign femininity pictures
+                    random_femininity_picture = random.choice(available_femininity_pictures)
+                    p.picture_assignment_femininity = random_femininity_picture
+                    print(f"Pictures in round {self.round_number}: {random_femininity_picture}")
+
+                    available_femininity_pictures.remove(random_femininity_picture)
+                    p.set_player_pictures({"available_femininity_pictures": available_femininity_pictures})
+                    print(f"State of dict in round {self.round_number}: {available_femininity_pictures}")
+            
+            # For rounds 12–20
+            else:
+                # Carry over group assignment and picture assignment for subsequent rounds
+                for p in self.get_players():
+                    p.group_assignment_fem = p.in_round(11).group_assignment_fem  # Group assignment stays constant
+
+                    # Fetch pictures from the previous round dynamically
+                    previous_round = self.round_number - 1
+                    previous_pictures = p.in_round(previous_round).get_player_pictures()
+                    p.set_player_pictures(previous_pictures)
+
+                # Select a new random femininity picture
+                for p in self.get_players():
+                    available_femininity_pictures = p.get_player_pictures().get("available_femininity_pictures", [])
+                    if available_femininity_pictures:  # Ensure there are pictures left
+                        random_femininity_picture = random.choice(available_femininity_pictures)
+                        p.picture_assignment_femininity = random_femininity_picture  # Save to correct field
+                        print(f"Pictures in round {self.round_number}: {random_femininity_picture}")
+
+                        # Remove the selected picture and update the player's available pictures
+                        available_femininity_pictures.remove(random_femininity_picture)
+                        p.set_player_pictures({"available_femininity_pictures": available_femininity_pictures})
+                        print(f"State of dict in round {self.round_number}: {available_femininity_pictures}")
+                    else:
+                        print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
 
 
 class Group(BaseGroup):
@@ -101,9 +164,12 @@ class Player(BasePlayer):
 
     #variable for group assignment
     group_assignment = models.IntegerField(initial=-1)
+    group_assignment_fem = models.IntegerField(initial=-1)
 
     #variable for picture assignment
     picture_assignment = models.IntegerField(initial=-1)
+
+    picture_assignment_femininity = models.IntegerField(initial=-1)
 
     #methods to handle JSON serialization and deserialization (should be in HelperMethods but I cant import them for some reason)
     def set_player_pictures(self, pictures_dict):

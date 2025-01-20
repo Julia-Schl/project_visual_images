@@ -1,68 +1,79 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-
 {% block title %}
 <h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
-    <hr>
+<hr>
 {% endblock %}
 
 {% block content %}
 <br>
-    Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.
-    <hr>
-    <!-- This is the most basic way of implementing an input field -->
-    <img   width="50%" height="50%" src="{% static 'pol_2.png' %}" />
-    <br>
+Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.
+<hr>
+<!-- This is the most basic way of implementing an input field -->
+<img width="50%" height="50%" src="{{ image_path_fem }}" />
+<br>
+
+<!-- Hidden input field for the picture assignment -->
+<input id="assigned_femininity_picture" type="hidden" name="assigned_femininity_picture" value="{{ assigned_femininity_picture }}" />
+
+<div style="display: none;">
+    {{ formfield "picture_assignment_femininity" }}
+</div>
+
+<br><br><br>
 
 <!-- Hidden popout question initially -->
-    <div id="popout-question" style="display: none;">
-        <p>Als nächstes interessiert uns, wie Sie das Aussehen von diesen Politikerinnen bewerten.</p>
+<div id="popout-question" style="display: none;">
+    <p>Als nächstes interessiert uns, wie Sie das Aussehen von diesen Politikerinnen bewerten.</p>
 
-        <!-- Form for the answer choices -->
-        <form method="post">
+    <!-- Form for the answer choices -->
+    <form method="post">
 
-            <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin: auto;">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;"></th>
-                        <th style="padding: 10px; font-size: 16px;">1</th>
-                        <th style="padding: 10px; font-size: 16px;">2</th>
-                        <th style="padding: 10px; font-size: 16px;">3</th>
-                        <th style="padding: 10px; font-size: 16px;">4</th>
-                        <th style="padding: 10px; font-size: 16px;">5</th>
-                        <th style="width: 20%;"></th>
-                        <th style="padding: 10px; font-size: 16px; text-align: right;">Keine Eingabe</th>
+        <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin: auto;">
+            <thead>
+                <tr>
+                    <th style="width: 20%;"></th>
+                    <th style="padding: 10px; font-size: 16px;">1</th>
+                    <th style="padding: 10px; font-size: 16px;">2</th>
+                    <th style="padding: 10px; font-size: 16px;">3</th>
+                    <th style="padding: 10px; font-size: 16px;">4</th>
+                    <th style="padding: 10px; font-size: 16px;">5</th>
+                    <th style="width: 20%;"></th>
+                    <th style="padding: 10px; font-size: 16px; text-align: right;">Keine Eingabe</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="text-align: right;">Überhaupt nicht feminin</td>
-                        <td><input type="radio" name="popout_question_femininity" value="1" {% if player.popout_question_femininity == 1 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_femininity" value="2" {% if player.popout_question_femininity == 2 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_femininity" value="3" {% if player.popout_question_femininity == 3 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_femininity" value="4" {% if player.popout_question_femininity == 4 %} checked {% endif %}></td>
-                        <td><input type="radio" name="popout_question_femininity" value="5" {% if player.popout_question_femininity == 5 %} checked {% endif %}></td>
-                        <td style="text-align: left;">Sehr feminin</td>
-                        <td><input type="radio" name="popout_question_femininity" value="-1" {% if player.popout_question_femininity == -1 %} checked {% endif %}></td>
-                    </tr>
-                </tbody>
-            </table>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: right;">Überhaupt nicht feminin</td>
+                    <td><input type="radio" name="popout_question_femininity" value="1" {% if player.popout_question_femininity == 1 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_femininity" value="2" {% if player.popout_question_femininity == 2 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_femininity" value="3" {% if player.popout_question_femininity == 3 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_femininity" value="4" {% if player.popout_question_femininity == 4 %} checked {% endif %}></td>
+                    <td><input type="radio" name="popout_question_femininity" value="5" {% if player.popout_question_femininity == 5 %} checked {% endif %}></td>
+                    <td style="text-align: left;">Sehr feminin</td>
+                    <td><input type="radio" name="popout_question_femininity" value="-1" {% if player.popout_question_femininity == -1 %} checked {% endif %}></td>
+                </tr>
+            </tbody>
+        </table>
 
-            <div class="form-errors">
-                {{ formfield_errors 'popout_question_femininity' }}
-            </div>
+        <!-- Show error message for the femininity field -->
+        <div class="form-errors">
+            {{ formfield_errors 'popout_question_femininity' }}
+        </div>
 
-            <button class="otree-btn-next btn btn-primary">Weiter</button>
-        </form>
-    </div>
 
-    <!-- Add JavaScript to show the popout after 3 seconds -->
-    <script>
-        setTimeout(function() {
-            // Show the popout question after 3 seconds
-            document.getElementById("popout-question").style.display = "block";
-        }, 3);  // 3000 milliseconds = 3 seconds
-    </script>
+
+        <button class="otree-btn-next btn btn-primary">Weiter</button>
+    </form>
+</div>
+
+<!-- Add JavaScript to show the popout after 3 seconds -->
+<script>
+    setTimeout(function() {
+        // Show the popout question after 3 seconds
+        document.getElementById("popout-question").style.display = "block";
+    }, 3);  
+</script>
 {% endblock %}
