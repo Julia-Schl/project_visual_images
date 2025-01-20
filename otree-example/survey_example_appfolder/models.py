@@ -16,24 +16,26 @@ doc = 'This is the app for the Candidates Pictures group of the "Designing and i
 class Constants(BaseConstants):
     name_in_url = 'politician-pictures'
     players_per_group = None
-    num_rounds = 2
+    num_rounds = 10
 
     # Global dictionary for group pictures
+    '''
     groupPictures = {
         0: ["1", "2"],
         1: ["3", "4"],
         2: ["5", "6"],
         3: ["7", "8"]
     }
+    #'''
 
     ## full dictionary with all groups and pictures so you dont have to type it out again :)
-    '''
+    
     groupPictures = {
         0: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
         1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
         2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
-    '''
+    
     
 
 class Subsession(BaseSubsession):
@@ -62,30 +64,39 @@ class Subsession(BaseSubsession):
                 #randomly select a pciture ID form the dict 
                 random_picture = random.choice(available_pictures)
                 p.picture_assignment = random_picture 
+                print(f"Picture in round {self.round_number}: {random_picture}")
 
                 #remove selected pic from the player dict 
                 available_pictures.remove(random_picture)
                 p.set_player_pictures({"available_pictures": available_pictures})
+                print(f"state of dict in round {self.round_number}:{available_pictures}")
 
-            #store the player dict in the session variables
-            self.session.vars['group_pictures'] = group_pictures 
 
         #if it is not the first round 
         else:
-            #carry over group assignment and picture assignment for subsequent rounds
+    # Carry over group assignment and picture assignment for subsequent rounds
             for p in self.get_players():
-                p.group_assignment = p.in_round(1).group_assignment
-                p.set_player_pictures(p.in_round(1).get_player_pictures())
+                p.group_assignment = p.in_round(1).group_assignment  # Group assignment stays constant
+                
+                # Fetch pictures from the previous round dynamically
+                previous_round = self.round_number - 1
+                previous_pictures = p.in_round(previous_round).get_player_pictures()
+                p.set_player_pictures(previous_pictures)
 
-            #select a new random picture 
+            # Select a new random picture
             for p in self.get_players():
-                available_pictures = p.get_player_pictures()["available_pictures"]
-                random_picture = random.choice(available_pictures)  
-                p.picture_assignment = random_picture
+                available_pictures = p.get_player_pictures().get("available_pictures", [])
+                if available_pictures:  # Ensure there are pictures left
+                    random_picture = random.choice(available_pictures)
+                    p.picture_assignment = random_picture
+                    print(f"Picture in round {self.round_number}: {random_picture}")
 
-                #remove selected picture from the player dict 
-                available_pictures.remove(random_picture)
-                p.set_player_pictures({"available_pictures": available_pictures})
+                    # Remove the selected picture and update the player's available pictures
+                    available_pictures.remove(random_picture)
+                    p.set_player_pictures({"available_pictures": available_pictures})
+                    print(f"State of dict in round {self.round_number}: {available_pictures}")
+                else:
+                    print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
 
 class Group(BaseGroup):
     pass

@@ -28,7 +28,7 @@ class Page1(Page):
         assigned_picture = self.player.picture_assignment 
         
         #construct the image path dynamically
-        image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.jpg"
+        image_path = f"/static/Group_{self.player.group_assignment}_full/P_{assigned_picture}.png"
         
         #send the variables to the HTML page 
         return {
@@ -38,7 +38,8 @@ class Page1(Page):
         }
 
     def is_displayed(self):
-        return True
+        return self.round_number > 11
+
 
 class Politician2_femininity(Page):
     form_model = Player
@@ -46,7 +47,7 @@ class Politician2_femininity(Page):
     
     def is_displayed(self):
         #if player is in round X display this page
-        return self.round_number == 2
+        return self.round_number == 10
 
 class DemoPage(Page):
     form_model = Player
@@ -54,7 +55,7 @@ class DemoPage(Page):
 
     def is_displayed(self):
         #print(f"DemoPage is_displayed: round_number={self.round_number}")
-        return self.round_number == 2
+        return self.round_number == 10
 
 class EndPage(Page):
     #style: this is a good example of the style 'CamelCase' that one normally uses for classes
@@ -62,7 +63,7 @@ class EndPage(Page):
 
     def is_displayed(self):
        # print(f"EndPage is_displayed: round_number={self.round_number}")
-        return self.round_number == 2
+        return self.round_number == 10
 
 #Here we define in which ordering we want the pages to be shown. We always start with a Welcome page and end with an End page.
 page_sequence = [Welcome, 
