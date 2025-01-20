@@ -71,10 +71,9 @@ class Subsession(BaseSubsession):
                 p.set_player_pictures({"available_pictures": available_pictures})
                 print(f"state of dict in round {self.round_number}:{available_pictures}")
 
-
         #if it is not the first round 
         else:
-    # Carry over group assignment and picture assignment for subsequent rounds
+            # Carry over group assignment and picture assignment for subsequent rounds
             for p in self.get_players():
                 p.group_assignment = p.in_round(1).group_assignment  # Group assignment stays constant
                 
@@ -98,13 +97,12 @@ class Subsession(BaseSubsession):
                 else:
                     print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
 
+
+
 class Group(BaseGroup):
     pass
 
-
-
 class Player(BasePlayer):
-    
     # Field to store JSON data as a string
     player_pictures = models.LongStringField(initial="{}")
 
@@ -118,7 +116,7 @@ class Player(BasePlayer):
     def set_player_pictures(self, pictures_dict):
         """Sets the player's picture dictionary."""
         self.player_pictures = json.dumps(pictures_dict)
-        
+
     def get_player_pictures(self):
         """Returns the player's picture dictionary."""
         return json.loads(self.player_pictures)
@@ -137,5 +135,4 @@ class Player(BasePlayer):
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Bitte bewerten Sie, wie feminin das Gesicht dieser Politikerin auf Sie wirkt."
     )
-
     age_question = models.IntegerField()                          
