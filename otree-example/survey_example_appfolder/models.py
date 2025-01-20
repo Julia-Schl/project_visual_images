@@ -16,7 +16,7 @@ doc = 'This is the app for the Candidates Pictures group of the "Designing and i
 class Constants(BaseConstants):
     name_in_url = 'politician-pictures'
     players_per_group = None
-    num_rounds = 10
+    num_rounds = 20
 
     ## full dictionary with all groups
     groupPictures = {
@@ -61,7 +61,7 @@ class Subsession(BaseSubsession):
                 print(f"state of dict in round {self.round_number}:{available_pictures}")
 
         #if it is not the first round 
-        else:
+        elif self.round_number > 1 and self.round_number < 11:
             # Carry over group assignment and picture assignment for subsequent rounds
             for p in self.get_players():
                 p.group_assignment = p.in_round(1).group_assignment  # Group assignment stays constant
