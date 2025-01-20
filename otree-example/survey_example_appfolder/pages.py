@@ -1,6 +1,7 @@
 from otree.api import Currency as c, currency_range, safe_json
 from ._builtin import Page, WaitPage
 from .models import Constants, Player
+import random
 
 #This is the pages.py file. Here we structure how our pages and pagesequence function.
 #Each page has its own class where you always specify form_model = Player as we have players for each page
@@ -30,15 +31,23 @@ class Page1(Page):
         #construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}_full/P_{assigned_picture}.png"
         
+        # Randomize which question to show
+        question_set = ['competence', 'trustworthiness']
+        selected_question = random.choice(question_set)
+
+        self.player.displayed_question = selected_question
+
         #send the variables to the HTML page 
         return {
             'group_pictures': available_pictures,
             'assigned_picture': assigned_picture,
             'image_path': image_path,
-        }
+            'displayed_question': selected_question  
+            }
+        
 
     def is_displayed(self):
-        return self.round_number > 11
+        return True
 
 
 class Politician2_femininity(Page):

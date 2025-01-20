@@ -129,6 +129,8 @@ class Player(BasePlayer):
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"
     )
+    displayed_question = models.StringField(
+        initial='',)
 
     popout_question_femininity = models.IntegerField(
         initial=-999,

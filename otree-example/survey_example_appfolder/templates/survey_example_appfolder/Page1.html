@@ -21,7 +21,16 @@
 <!-- Hidden popout question initially -->
 <div id="popout-question" style="display: none;">
     <br>
-    <p><b>Wie schätzen Sie die Kompetenz dieser Politikerin ein?</b></p>
+    <p><b>
+        {% if displayed_question == 'competence' %}
+
+        Wie schätzen Sie die Kompetenz dieser Politikerin ein?
+
+        {% elif displayed_question == 'trustworthiness' %}
+
+        Wie vertrauenswürdig ist diese Politikerin Ihrer Meinung nach?
+        {%endif%}
+    </b></p>
 
     <form method="post">
         <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed;">
@@ -39,13 +48,23 @@
             </thead>
             <tbody>
                 <tr>
-                    <td style="text-align: right;">Überhaupt nicht kompetent</td>
+                    <td style="text-align: right;">
+                        {% if displayed_question == 'competence' %}
+                        Überhaupt nicht kompetent
+                        {% elif displayed_question == 'trustworthiness' %}
+                        Überhaupt nicht vertrauenswürdig
+                        {%endif%}</td>
                     <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
                     <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
                     <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
                     <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
                     <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
-                    <td style="text-align: left;">Sehr kompetent</td>
+                    <td style="text-align: left;">
+                        {% if displayed_question == 'competence' %}
+                        Sehr kompetent
+                        {% elif displayed_question == 'trustworthiness' %}
+                        Sehr vertrauenswürdig
+                        {%endif%}</td>
                     <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
                 </tr>
             </tbody>
@@ -63,6 +82,6 @@
     // Show the popout question after 3 seconds
     setTimeout(function() {
         document.getElementById("popout-question").style.display = "block";
-    }, 3000);  // 3000 milliseconds = 3 seconds
+    }, 3);  // 3000 milliseconds = 3 seconds
 </script>
 {% endblock %}
