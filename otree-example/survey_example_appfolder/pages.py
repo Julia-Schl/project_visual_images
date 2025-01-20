@@ -24,7 +24,7 @@ class Page1(Page):
         assigned_picture = self.player.picture_assignment 
 
         # Construct the image path dynamically
-        image_path = f"/static/Group_{self.player.group_assignment}_full/P_{assigned_picture}.png"
+        image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
         # Randomize which question to show
         question_set = ['competence', 'trustworthiness']
