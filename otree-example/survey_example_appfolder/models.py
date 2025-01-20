@@ -18,18 +18,7 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 10
 
-    # Global dictionary for group pictures
-    '''
-    groupPictures = {
-        0: ["1", "2"],
-        1: ["3", "4"],
-        2: ["5", "6"],
-        3: ["7", "8"]
-    }
-    #'''
-
-    ## full dictionary with all groups and pictures so you dont have to type it out again :)
-    
+    ## full dictionary with all groups
     groupPictures = {
         0: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
         1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
