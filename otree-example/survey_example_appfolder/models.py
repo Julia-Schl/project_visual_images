@@ -190,7 +190,7 @@ class Player(BasePlayer):
         label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"
     )
     displayed_question = models.StringField(
-        initial='',)
+        initial='N/A',)
 
     popout_question_femininity = models.IntegerField(
         initial=-999,
