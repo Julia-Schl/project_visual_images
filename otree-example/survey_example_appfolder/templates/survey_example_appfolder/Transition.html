@@ -1,0 +1,27 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+<h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
+<hr>
+{% endblock %}
+
+{% block content %}
+<p style="font-size: 18px;"> Vielen Dank für Ihre Bewertung der ersten 10 Bilder! <br> <br>
+
+    Ihre Einschätzungen sind für diese Studie sehr wertvoll und tragen dazu bei, ein besseres Verständnis darüber zu gewinnen, wie Menschen politische Persönlichkeiten wahrnehmen. <br> <br>
+    Im zweiten Fragenblock interessiert uns, wie Sie das Aussehen von folgenden Personen bewerten. Besonders, wie <span style="font-weight: bold; color: #FF00FF; text-decoration: underline;">feminin</span>
+    Sie die Ihnen gezeigte Person wahrnehmen. Dazu werden Ihnen nun weitere <span style="font-weight: bold; text-decoration: underline;">10 Bilder</span> angezeigt. <br> <br> 
+    Bitte nehmen Sie sich auch hier die Zeit, jedes Bild genau zu betrachten, und beantworten Sie die Frage so ehrlich wie möglich. Vielen Dank für Ihre Zeit und Ihre wertvolle Teilnahme an dieser Studie!<br>
+    Sobald Sie bereit sind klicken die bitte auf den <b>"Weiter"</b>-Button.
+    </p>
+
+<!-- Continue Button -->
+<br> 
+<div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+    <button class="otree-btn-next btn btn-primary">Weiter</button>
+</div>
+
+
+
+{% endblock %}

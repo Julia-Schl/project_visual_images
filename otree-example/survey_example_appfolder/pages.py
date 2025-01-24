@@ -44,6 +44,10 @@ class Page1(Page):
         return 1 <= self.round_number <= 10
 
 
+class Transition(Page):
+    def is_displayed(self):
+            return self.round_number == 11
+
 class Page2(Page):
     form_model = 'player'
     form_fields = ["popout_question_femininity", "picture_assignment_femininity"]
@@ -95,6 +99,7 @@ class EndPage(Page):
 page_sequence = [
     Welcome,
     Page1,
+    Transition,
     Page2,
     EndPage
 ]

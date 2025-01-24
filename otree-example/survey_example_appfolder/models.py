@@ -25,15 +25,7 @@ class Constants(BaseConstants):
         2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
     
-    #dictionary for second part (might still need it later)
-    '''
-    femininityPictures = {
-        2: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
-        3: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
-        0: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
-        1: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]} 
-    '''
-
+    
 class Subsession(BaseSubsession):
 
     def creating_session(self):
@@ -96,7 +88,9 @@ class Subsession(BaseSubsession):
         
         # For rounds 11-20, use PicturesFemininity
         elif 11 <= self.round_number <= 20:
+            #if it is round 11 
             if self.round_number == 11:
+                #create new dict
                 femininity_pictures = {}
 
                 for i, p in enumerate(players):
