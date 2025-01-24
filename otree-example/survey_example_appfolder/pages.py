@@ -21,7 +21,7 @@ class Page1(Page):
         available_pictures = group_pictures.get(player_group, [])
 
         # Get the assigned picture
-        assigned_picture = self.player.picture_assignment 
+        assigned_picture = self.player.picture_assignment
 
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
@@ -30,14 +30,31 @@ class Page1(Page):
         question_set = ['competence', 'trustworthiness']
         selected_question = random.choice(question_set)
 
+        # Attempt to assign a question type based on counters
+        # selected_question = None
+        for question in question_set:
+            if question == 'competence' and self.session.vars['competence_counters'][player_group] < Constants.max_assignments:
+                selected_question = 'competence'
+                self.session.vars['competence_counters'][player_group] += 1
+                break
+            elif question == 'trustworthiness' and self.session.vars['trust_counters'][player_group] < Constants.max_assignments:
+                selected_question = 'trustworthiness'
+                self.session.vars['trust_counters'][player_group] += 1
+                break
+        else:
+            # Handle case where both counters are maxed out
+            print(f"Group {player_group} has reached the limit for both question types.")
+            selected_question = None  # Default behavior or fallback
+
         self.player.displayed_question = selected_question
 
         # Send the variables to the HTML page
+
         return {
             'group_pictures': available_pictures,
             'assigned_picture': assigned_picture,
             'image_path': image_path,
-            'displayed_question': selected_question  
+            'displayed_question': selected_question
         }
 
     def is_displayed(self):
@@ -72,8 +89,6 @@ class Page2(Page):
 
     def is_displayed(self):
         return 11 <= self.round_number <= 20
-        
-
 
 
 class DemoPage(Page):

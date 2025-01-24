@@ -21,16 +21,22 @@ class Constants(BaseConstants):
     ## full dictionary with all groups
     groupPictures = {
         0: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
-        1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
+        1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "100"],
         2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
     '''
     femininityPictures = {
         2: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
-        3: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "102"],
+        3: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "100"],
         0: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         1: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]} 
     '''
+
+    # Counters for question assignments
+    competence_counters = [0, 0, 0, 0]  # One counter for each group
+    trust_counters = [0, 0, 0, 0]  # One counter for each group
+    max_assignments = 125  # Max people per group per question type
+
 
 class Subsession(BaseSubsession):
 
@@ -44,7 +50,14 @@ class Subsession(BaseSubsession):
                 #define number of groups and create empty dict
                 num_groups = 4
                 group_pictures = {}
-                #iterate over players 
+
+                # Initialize counters for each group and question type in session.vars
+                if 'competence_counters' not in self.session.vars:
+                    self.session.vars['competence_counters'] = [0] * num_groups
+                if 'trust_counters' not in self.session.vars:
+                    self.session.vars['trust_counters'] = [0] * num_groups
+
+                #iterate over players
                 for i, p in enumerate(players):
                     #assign player into group
                     p.group_assignment = i % num_groups
@@ -194,4 +207,8 @@ class Player(BasePlayer):
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Bitte bewerten Sie, wie feminin das Gesicht dieser Politikerin auf Sie wirkt."
     )
-    age_question = models.IntegerField()                          
+    age_question = models.IntegerField()
+
+    # Counters for questions
+    competence_question_count = models.IntegerField(initial=0)
+    trustworthiness_question_count = models.IntegerField(initial=0)
