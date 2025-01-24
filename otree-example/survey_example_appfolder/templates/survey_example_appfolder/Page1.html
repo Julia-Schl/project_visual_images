@@ -1,82 +1,85 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
-{% block title %}
-<h2> Befragung zur Wahrnehmung von Politikerinnen </h2>
-<hr>
-{% endblock %}
-
 {% block content %}
 <br>
-<b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Fragen.</b>
+<!-- Centering text elements, but not the button -->
+<div style="text-align: center; font-size: 20px;">
+    <b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Frage.</b>
+</div>
+<br>
+<!-- Center the image using CSS -->
+<div style="text-align: center;">
+    <!-- access the image path variable and display the correct picture -->
+    <img id="politician" width="50%" height="50%" src="{{ image_path }}" />
+</div>
 
-<!-- access the image path variable and display the correct picture  -->
-<img id="politician" width="50%" height="50%" src="{{ image_path }}" />
-
-<!-- Hidden input field for the picture assignment  -->
+<!-- Hidden input field for the picture assignment -->
 <input id="picture_assignment" type="hidden" name="picture_assignment" value="{{ assigned_picture }}" />
 
 <br><br><br>
 
 <!-- Hidden popout question initially -->
-<div id="popout-question" style="display: none;">
+<div id="popout-question" style="display: none; text-align: center;">
     <br>
-    <p><b>
+    <p style="font-size: 18px;"><b>
         {% if displayed_question == 'competence' %}
-
-        Wie schätzen Sie die <b><u>Kompetenz</u></b> dieser Politikerin ein?
-
+        Wie schätzen Sie die <span style="font-weight: bold; color: #008080">Kompetenz</span> dieser Politikerin ein?
         {% elif displayed_question == 'trustworthiness' %}
-
-        Wie <b><u>vertrauenswürdig</u></b> ist diese Politikerin Ihrer Meinung nach?
-        {%endif%}
+        Wie <span style="font-weight: bold; color: #FFA500">vertrauenswürdig</span> ist diese Politikerin Ihrer Meinung nach?
+        {% endif %}
         </b></p>
+        <br> 
 
-    <form method="post">
-        <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed;">
-            <thead>
-                <tr>
-                    <th style="width: 20%;"></th>
-                    <th style="padding: 10px; font-size: 16px;">1</th>
-                    <th style="padding: 10px; font-size: 16px;">2</th>
-                    <th style="padding: 10px; font-size: 16px;">3</th>
-                    <th style="padding: 10px; font-size: 16px;">4</th>
-                    <th style="padding: 10px; font-size: 16px;">5</th>
-                    <th style="width: 20%;"></th>
-                    <th style="padding: 10px; font-size: 16px;">Keine Eingabe</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: right;">
-                        {% if displayed_question == 'competence' %}
-                        Überhaupt nicht kompetent
-                        {% elif displayed_question == 'trustworthiness' %}
-                        Überhaupt nicht vertrauenswürdig
-                        {%endif%}</td>
-                    <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %}></td>
-                    <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %}></td>
-                    <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %}></td>
-                    <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %}></td>
-                    <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %}></td>
-                    <td style="text-align: left;">
-                        {% if displayed_question == 'competence' %}
-                        Sehr kompetent
-                        {% elif displayed_question == 'trustworthiness' %}
-                        Sehr vertrauenswürdig
-                        {%endif%}</td>
-                    <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %}></td>
-                </tr>
-            </tbody>
-        </table>
+        <form method="post">
+            <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin-left: auto; margin-right: auto;">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;"></th>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 20%;"></th>
+                        <th style="font-size: 16px;">Keine Eingabe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: right; font-weight: bold;">
+                            {% if displayed_question == 'competence' %}
+                            Überhaupt nicht kompetent
+                            {% elif displayed_question == 'trustworthiness' %}
+                            Überhaupt nicht vertrauenswürdig
+                            {% endif %}
+                        </td>
+                        <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %} class="large-radio"></td>
+                        <td style="text-align: left; font-weight: bold;">
+                            {% if displayed_question == 'competence' %}
+                            Sehr kompetent
+                            {% elif displayed_question == 'trustworthiness' %}
+                            Sehr vertrauens-<br>würdig
+                            {% endif %}
+                        </td>
+                        <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %} class="large-radio"></td>
+                    </tr>
+                </tbody>
+            </table>
 
         <div class="form-errors">
             {{ formfield_errors 'popout_question_competence' }}
-        </div>
-
-        <button class="otree-btn-next btn btn-primary">Weiter</button>
-    </form>
-</div>
+            <br> 
+            <!-- Button stays aligned to the right -->
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <button class="otree-btn-next btn btn-primary">Weiter</button>
+            </div>
+        </form>
+    </div>
 
 <script>
     // Show the popout question after 3 seconds
@@ -84,4 +87,12 @@
         document.getElementById("popout-question").style.display = "block";
     }, 3);  // 3000 milliseconds = 3 seconds
 </script>
+
+<!-- Custom CSS for larger radio buttons -->
+<style>
+    .large-radio {
+        transform: scale(1.5); /* Increase the size of the radio button */
+    }
+</style>
+
 {% endblock %}
