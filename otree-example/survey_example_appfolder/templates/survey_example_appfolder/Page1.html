@@ -2,12 +2,21 @@
 {% load otree static %}
 
 {% block content %}
-<br>
 <!-- Centering text elements, but not the button -->
-<div style="text-align: center; font-size: 20px;">
-    <b>Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an und beantworten Sie dann die Frage.</b>
+<div style="text-align: center; font-size: 18px;">
+    Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an <br> und beantworten Sie dann die Frage.
 </div>
 <br>
+
+<br>
+<p style="text-align: center; font-size: 20px;"><b>
+    {% if displayed_question == 'competence' %}
+    Wie schätzen Sie die <span style="font-weight: bold; color: #008080; text-decoration: underline;">Kompetenz</span> dieser Politikerin ein?
+    {% elif displayed_question == 'trustworthiness' %}
+    Wie <span style="font-weight: bold; color: #FFA500; text-decoration: underline;">vertrauenswürdig</span> ist diese Politikerin Ihrer Meinung nach?
+    {% endif %}
+    </b></p>
+
 <!-- Center the image using CSS -->
 <div style="text-align: center;">
     <!-- access the image path variable and display the correct picture -->
@@ -17,32 +26,21 @@
 <!-- Hidden input field for the picture assignment -->
 <input id="picture_assignment" type="hidden" name="picture_assignment" value="{{ assigned_picture }}" />
 
-<br><br><br>
-
 <!-- Hidden popout question initially -->
 <div id="popout-question" style="display: none; text-align: center;">
-    <br>
-    <p style="font-size: 18px;"><b>
-        {% if displayed_question == 'competence' %}
-        Wie schätzen Sie die <span style="font-weight: bold; color: #008080">Kompetenz</span> dieser Politikerin ein?
-        {% elif displayed_question == 'trustworthiness' %}
-        Wie <span style="font-weight: bold; color: #FFA500">vertrauenswürdig</span> ist diese Politikerin Ihrer Meinung nach?
-        {% endif %}
-        </b></p>
-        <br> 
 
         <form method="post">
             <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin-left: auto; margin-right: auto;">
                 <thead>
                     <tr>
-                        <th style="width: 20%;"></th>
+                        <th style="width: 30%;"></th>
                         <th style="width: 10%;"></th>
                         <th style="width: 10%;"></th>
                         <th style="width: 10%;"></th>
                         <th style="width: 10%;"></th>
                         <th style="width: 10%;"></th>
-                        <th style="width: 20%;"></th>
-                        <th style="font-size: 16px;">Keine Eingabe</th>
+                        <th style="width: 30%;"></th>
+                        <th style="padding: 0px; font-size: 16px; line-height: 1.5; margin: 0;">Keine Eingabe</th>
                     </tr>
                 </thead>
                 <tbody>
