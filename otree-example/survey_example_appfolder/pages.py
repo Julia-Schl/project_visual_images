@@ -30,23 +30,14 @@ class Page1(Page):
         question_set = ['competence', 'trustworthiness']
         selected_question = random.choice(question_set)
 
-        # Attempt to assign a question type based on counters
-        # selected_question = None
-        for question in question_set:
-            if question == 'competence' and self.session.vars['competence_counters'][player_group] < Constants.max_assignments:
-                selected_question = 'competence'
-                self.session.vars['competence_counters'][player_group] += 1
-                break
-            elif question == 'trustworthiness' and self.session.vars['trust_counters'][player_group] < Constants.max_assignments:
-                selected_question = 'trustworthiness'
-                self.session.vars['trust_counters'][player_group] += 1
-                break
-        else:
-            # Handle case where both counters are maxed out
-            print(f"Group {player_group} has reached the limit for both question types.")
-            selected_question = None  # Default behavior or fallback
-
         self.player.displayed_question = selected_question
+
+        # Increment counters if in rounds 1 to 10
+        if 1 <= self.round_number <= 10:
+            if selected_question == 'competence':
+                self.player.competence_question_count += 1
+            elif selected_question == 'trustworthiness':
+                self.player.trustworthiness_question_count += 1
 
         # Send the variables to the HTML page
 
@@ -60,7 +51,9 @@ class Page1(Page):
     def is_displayed(self):
         return 1 <= self.round_number <= 10
 
-
+class Transition(Page):
+    def is_displayed(self):
+            return self.round_number == 11
 class Page2(Page):
     form_model = 'player'
     form_fields = ["popout_question_femininity", "picture_assignment_femininity"]
@@ -102,6 +95,19 @@ class DemoPage(Page):
 class EndPage(Page):
     form_model = Player
 
+    def vars_for_template(self):
+        # Access the group and counters
+        player_group = self.player.group_assignment
+
+        # Retrieve the final counter values for the player group
+        competence_count = self.session.vars['competence_counters'][player_group]
+        trustworthiness_count = self.session.vars['trust_counters'][player_group]
+
+        # Pass these values to the template for display
+        return {
+            'competence_count': competence_count,
+            'trustworthiness_count': trustworthiness_count
+        }
     def is_displayed(self):
         return self.round_number == 20
 

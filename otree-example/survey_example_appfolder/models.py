@@ -44,18 +44,19 @@ class Subsession(BaseSubsession):
         # fetch all players
         players = self.get_players()
 
+        # Initialize counters for each group and question type if they don't exist yet
+        if 'competence_counters' not in self.session.vars:
+            self.session.vars['competence_counters'] = [0, 0, 0, 0]  # One counter for each group
+        if 'trust_counters' not in self.session.vars:
+            self.session.vars['trust_counters'] = [0, 0, 0, 0]  # One counter for each group
+
+
         if 1 <= self.round_number <= 10:
             # if it is the first round 
             if self.round_number == 1:
                 #define number of groups and create empty dict
                 num_groups = 4
                 group_pictures = {}
-
-                # Initialize counters for each group and question type in session.vars
-                if 'competence_counters' not in self.session.vars:
-                    self.session.vars['competence_counters'] = [0] * num_groups
-                if 'trust_counters' not in self.session.vars:
-                    self.session.vars['trust_counters'] = [0] * num_groups
 
                 #iterate over players
                 for i, p in enumerate(players):
@@ -200,7 +201,7 @@ class Player(BasePlayer):
         label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"
     )
     displayed_question = models.StringField(
-        initial='',)
+        initial='N/A',)
 
     popout_question_femininity = models.IntegerField(
         initial=-999,
