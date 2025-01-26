@@ -26,26 +26,49 @@ class Page1(Page):
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
-        # Randomize which question to show
-        question_set = ['competence', 'trustworthiness']
-        selected_question = random.choice(question_set)
+        # Get the current counters for the questions in the player's group
+        competence_count = self.session.vars['competence_counters'][player_group]
+        trustworthiness_count = self.session.vars['trust_counters'][player_group]
 
+        # Determine the maximum limit for each question
+        limit = 126
+
+        # Randomize which question to show based on the limits
+        if competence_count < limit and trustworthiness_count < limit:
+            # Both questions are still within the limit, so randomize
+            question_set = ['competence', 'trustworthiness']
+            selected_question = random.choice(question_set)
+        elif competence_count >= limit:
+            # Competence question has reached the limit, so only show trustworthiness
+            selected_question = 'trustworthiness'
+        elif trustworthiness_count >= limit:
+            # Trustworthiness question has reached the limit, so only show competence
+            selected_question = 'competence'
+
+        # Set the displayed question for the player
         self.player.displayed_question = selected_question
 
-        # Increment counters if in rounds 1 to 10
-        if 1 <= self.round_number <= 10:
-            if selected_question == 'competence':
-                self.player.competence_question_count += 1
-            elif selected_question == 'trustworthiness':
-                self.player.trustworthiness_question_count += 1
+
+        # Increment the player's individual display counter
+        if selected_question == 'competence':
+            self.player.competence_question_count += 1
+            # Increment the group's competence counter in session.vars
+            self.session.vars['competence_counters'][player_group] += 1
+        elif selected_question == 'trustworthiness':
+            self.player.trustworthiness_question_count += 1
+            # Increment the group's trustworthiness counter in session.vars
+            self.session.vars['trust_counters'][player_group] += 1
+
+
 
         # Send the variables to the HTML page
-
         return {
             'group_pictures': available_pictures,
             'assigned_picture': assigned_picture,
             'image_path': image_path,
-            'displayed_question': selected_question
+            'displayed_question': selected_question,
+            'competence_display_count': self.player.competence_question_count,  # Display individual count
+            'trustworthiness_display_count': self.player.trustworthiness_question_count,  # Display individual count
         }
 
     def is_displayed(self):
@@ -54,6 +77,7 @@ class Page1(Page):
 class Transition(Page):
     def is_displayed(self):
             return self.round_number == 11
+
 class Page2(Page):
     form_model = 'player'
     form_fields = ["popout_question_femininity", "picture_assignment_femininity"]
