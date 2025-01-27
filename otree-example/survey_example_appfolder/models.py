@@ -8,7 +8,8 @@ from otree.api import (
     Currency as c,
     currency_range,
 )
-import random, json 
+import random, json
+
 
 author = 'Richard Neureuther, Julia Schleißheimer, Mariia Pyvovar'
 doc = 'This is the app for the Candidates Pictures group of the "Designing and implementing online survey experiments" seminar.'
@@ -213,3 +214,9 @@ class Player(BasePlayer):
     # Counters for questions
     competence_question_count = models.IntegerField(initial=0)
     trustworthiness_question_count = models.IntegerField(initial=0)
+
+    # Add this field to store the start time of the page
+    time_on_page_start = models.StringField(initial="")
+
+    # The existing time_spent_on_question field:
+    time_spent_on_question = models.FloatField(initial=0.0)

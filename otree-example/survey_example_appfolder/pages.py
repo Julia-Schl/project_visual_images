@@ -2,6 +2,7 @@ from otree.api import Currency as c, currency_range, safe_json
 from ._builtin import Page, WaitPage
 from .models import Constants, Player
 import random
+from datetime import datetime
 
 class Welcome(Page):
     def is_displayed(self):
@@ -13,6 +14,11 @@ class Page1(Page):
     form_fields = ['popout_question_competence', 'picture_assignment']
 
     def vars_for_template(self):
+
+        # Set the start time if it's not already set (this happens on the first visit)
+        if self.player.time_on_page_start == "":
+            self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         # Fetch the group_pictures from session.vars
         group_pictures = self.session.vars.get('group_pictures', {})
 
@@ -71,8 +77,15 @@ class Page1(Page):
             'trustworthiness_display_count': self.player.trustworthiness_question_count,  # Display individual count
         }
 
+    def before_next_page(self):
+        if self.player.time_on_page_start != "":
+            start_time = datetime.strptime(self.player.time_on_page_start, '%Y-%m-%d %H:%M:%S')
+            time_spent = datetime.now() - start_time
+            self.player.time_spent_on_question = time_spent.total_seconds()
+
     def is_displayed(self):
         return 1 <= self.round_number <= 10
+
 
 class Transition(Page):
     def is_displayed(self):
@@ -83,6 +96,11 @@ class Page2(Page):
     form_fields = ["popout_question_femininity", "picture_assignment_femininity"]
 
     def vars_for_template(self):
+
+        # Set the start time if it's not already set (this happens on the first visit)
+        if self.player.time_on_page_start == "":
+            self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         print(f"Player ID: {self.player.id_in_group}, Group Assignment Fem: {self.player.group_assignment_fem}")
         # Fetch the femininity pictures from session.vars
         femininity_pictures = self.session.vars.get('femininity_pictures', {})
@@ -101,8 +119,15 @@ class Page2(Page):
         return {
             'femininity_pictures': available_femininity_pictures,
             'assigned_femininity_picture': assigned_femininity_picture,
-            'image_path_fem': image_path_fem
+            'image_path_fem': image_path_fem,
+            'time_spent_on_question': self.player.time_spent_on_question,  # Send the time to the HTML page
         }
+
+    def before_next_page(self):
+        if self.player.time_on_page_start != "":
+            start_time = datetime.strptime(self.player.time_on_page_start, '%Y-%m-%d %H:%M:%S')
+            time_spent = datetime.now() - start_time
+            self.player.time_spent_on_question = time_spent.total_seconds()
 
     def is_displayed(self):
         return 11 <= self.round_number <= 20
