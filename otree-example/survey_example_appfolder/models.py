@@ -24,13 +24,38 @@ class Constants(BaseConstants):
         1: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "100"],
         2: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
         3: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]}
-    
-    
+
+    '''
+       femininityPictures = {
+           2: ["10", "21", "30", "41", "50", "61", "70", "81", "90", "101"],
+           3: ["11", "20", "31", "40", "51", "60", "71", "80", "91", "100"],
+           0: ["110", "121", "130", "141", "150", "161", "170", "181", "190", "201"],
+           1: ["111", "120", "131", "140", "151", "160", "171", "180", "191","200"]} 
+       '''
+
+    # Counters for question assignments
+    competence_counters = [0, 0, 0, 0]  # One counter for each group
+    trust_counters = [0, 0, 0, 0]  # One counter for each group
+    max_assignments = 125  # Max people per group per question type
+
+
 class Subsession(BaseSubsession):
 
     def creating_session(self):
         # fetch all players
         players = self.get_players()
+
+        # Initialize counters per picture per group
+        if 'competence_counters' not in self.session.vars:
+            self.session.vars['competence_counters'] = {group: {} for group in range(4)}  # Dictionary per group
+        if 'trust_counters' not in self.session.vars:
+            self.session.vars['trust_counters'] = {group: {} for group in range(4)}  # Dictionary per group
+
+        # Initialize per-picture counters
+        for group, pictures in Constants.groupPictures.items():
+            for picture in pictures:
+                self.session.vars['competence_counters'][group][picture] = 0
+                self.session.vars['trust_counters'][group][picture] = 0
 
         if 1 <= self.round_number <= 10:
             # if it is the first round 
@@ -191,4 +216,14 @@ class Player(BasePlayer):
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Bitte bewerten Sie, wie feminin das Gesicht dieser Politikerin auf Sie wirkt."
     )
-    age_question = models.IntegerField()                          
+    age_question = models.IntegerField()
+
+    # Counters for questions
+    competence_question_count = models.IntegerField(initial=0)
+    trustworthiness_question_count = models.IntegerField(initial=0)
+
+    # Add this field to store the start time of the page
+    time_on_page_start = models.StringField(initial="")
+
+    # The existing time_spent_on_question field:
+    time_spent_on_question = models.FloatField(initial=0.0)
