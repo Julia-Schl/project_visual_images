@@ -2,17 +2,35 @@
 {% load otree static %}
 
 {% block content %}
+<!-- Event-Listener that displays the "Weiter"-Button only after a radio option is selected  -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const popoutQuestion = document.getElementById("popout-question");
+        const weiterButton = document.getElementById("weiter-button");
+        const radioButtons = document.querySelectorAll("input[name='popout_question_femininity']");
+
+        weiterButton.style.display = "none";
+
+        radioButtons.forEach(function(radio) {
+            radio.addEventListener("change", function() {
+                weiterButton.style.display = "block";
+            });
+        });
+    });
+</script>
 <br>
-<!-- Centering text elements, but not the button -->
+<!-- Centering text elements-->
 <div style="text-align: center; font-size: 20px;">
-    Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an <br> und beantworten Sie dann die Frage.
+    Bitte schauen Sie sich diese Person für <b></b>mindestens 3 Sekunden genau an <br> und beantworten Sie dann die Frage. Sobald Sie eine der Antwortmöglichkeiten ausgewählt haben,
+    <br> können Sie zur nächsten Seite fortfahren.
 </div>
 <br>
 <br>
     <p style="text-align: center; font-size: 18px;">
         <b>Bitte bewerten Sie, wie <span style="font-weight: bold; color: #800080; text-decoration: underline;">feminin</span> das Gesicht dieser Politikerin auf Sie wirkt.</b></p>
 
-<!-- Center the image using CSS -->
+<!-- create image container and store picture  -->
 <div style="text-align: center;">
     <img id="politician_fem" width="50%" height="50%" src="{{ image_path_fem }}" />
 </div>
@@ -24,10 +42,9 @@
     {{ formfield "picture_assignment_femininity" }}
 </div>
 
-<!-- Hidden popout question initially -->
+<!-- Radio-Buttons question for femininity-->
 <div id="popout-question" style="display: none; text-align: center;">
 
-    <!-- Form for the answer choices -->
     <form method="post">
 
         <table style="border-collapse: collapse; text-align: center; width: 60%; table-layout: fixed; margin-left: auto; margin-right: auto;">
@@ -40,7 +57,7 @@
                     <th style="width: 10%;"></th>
                     <th style="width: 10%;"></th>
                     <th style="width: 30%;"></th>
-                    <th style="padding: 0px; font-size: 16px; line-height: 1.5; margin: 0;">Keine Anngabe</th>
+                    <th style="padding: 0px; font-size: 16px; line-height: 1.5; margin: 0;">Keine Angabe</th>
                     </th>                    
 
                 </tr>
@@ -58,27 +75,25 @@
                 </tr>
             </tbody>
         </table>
-
+        <!-- Fix "Weiter"-Button to the bottom right  -->       
         <div class="form-errors">
             {{ formfield_errors 'popout_question_femininity' }}
             <br>
-            <!-- Button stays aligned to the right -->
             <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                <button class="otree-btn-next btn btn-primary">Weiter</button>
+                <button id="weiter-button" class="otree-btn-next btn btn-primary">Weiter</button>
             </div>
         </div>
-
     </form>
 </div>
 
+<!--Show  Radio Buttons after 3 seconds  -->
 <script>
-    // Show the popout question after 3 seconds
     setTimeout(function() {
         document.getElementById("popout-question").style.display = "block";
-    }, 3);  // 3000 milliseconds = 3 seconds
+    }, 3000);  
 </script>
 
-<!-- Custom CSS for larger radio buttons -->
+<!-- Increase size of radio button  -->
 <style>
     .large-radio {
         transform: scale(1.5); /* Increase the size of the radio button */

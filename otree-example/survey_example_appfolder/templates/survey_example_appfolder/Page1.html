@@ -2,13 +2,33 @@
 {% load otree static %}
 
 {% block content %}
-<!-- Centering text elements, but not the button -->
+
+<!-- Event-Listener that displays the "Weiter"-Button only after a radio option is selected  -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hide the popout question initially
+        const popoutQuestion = document.getElementById("popout-question");
+        const weiterButton = document.getElementById("weiter-button");
+        const radioButtons = document.querySelectorAll("input[name='popout_question_competence']");
+
+        weiterButton.style.display = "none";
+
+        radioButtons.forEach(function(radio) {
+            radio.addEventListener("change", function() {
+                weiterButton.style.display = "block";
+            });
+        });
+    });
+</script>
+
+<!-- Centering text elements-->
 <div style="text-align: center; font-size: 18px;">
-    Bitte schauen Sie sich diese Person für mindestens 3 Sekunden genau an <br> und beantworten Sie dann die Frage.
+    Bitte schauen Sie sich diese Person für <b></b>mindestens 3 Sekunden genau an <br> und beantworten Sie dann die Frage. Sobald Sie eine der Antwortmöglichkeiten ausgewählt haben,
+    <br> können Sie mit der nächsten Seite fortfahren.
 </div>
 <br>
-
 <br>
+<!-- Display either competence or Trustworthiness question -->
 <p style="text-align: center; font-size: 20px;"><b>
     {% if displayed_question == 'competence' %}
     Wie schätzen Sie die <span style="font-weight: bold; color: #008080; text-decoration: underline;">Kompetenz</span> dieser Politikerin ein?
@@ -17,16 +37,16 @@
     {% endif %}
     </b></p>
 
-<!-- Center the image using CSS -->
+<!-- create image container and store picture  -->
 <div style="text-align: center;">
-    <!-- access the image path variable and display the correct picture -->
     <img id="politician" width="50%" height="50%" src="{{ image_path }}" />
 </div>
 
 <!-- Hidden input field for the picture assignment -->
 <input id="picture_assignment" type="hidden" name="picture_assignment" value="{{ assigned_picture }}" />
-
-<!-- Hidden popout question initially -->
+<br>
+<br>
+<!-- Radio-Buttons QUestion for either Trust or Competence-->
 <div id="popout-question" style="display: none; text-align: center;">
 
         <form method="post">
@@ -40,7 +60,7 @@
                         <th style="width: 10%;"></th>
                         <th style="width: 10%;"></th>
                         <th style="width: 30%;"></th>
-                        <th style="padding: 0px; font-size: 16px; line-height: 1.5; margin: 0;">Keine Anngabe</th>
+                        <th style="padding: 0px; font-size: 16px; line-height: 1.5; margin: 0;">Keine Angabe</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,27 +89,27 @@
                 </tbody>
             </table>
 
-        <div class="form-errors">
-            {{ formfield_errors 'popout_question_competence' }}
-            <br> 
-            <!-- Button stays aligned to the right -->
-            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                <button class="otree-btn-next btn btn-primary">Weiter</button>
+            <!-- Fix "Weiter"-Button to the bottom right  -->
+            <div class="form-errors">
+                {{ formfield_errors 'popout_question_competence' }}
+                <br> 
+                <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <button id="weiter-button" class="otree-btn-next btn btn-primary">Weiter</button>
+                </div>
+           
             </div>
-        </form>
-    </div>
 
+<!--Show  Radio Buttons after 3 seconds  -->
 <script>
-    // Show the popout question after 3 seconds
     setTimeout(function() {
         document.getElementById("popout-question").style.display = "block";
-    }, 3);  // 3000 milliseconds = 3 seconds
+    }, 3000);  
 </script>
 
-<!-- Custom CSS for larger radio buttons -->
+<!-- Increase size of radio button  -->
 <style>
     .large-radio {
-        transform: scale(1.5); /* Increase the size of the radio button */
+        transform: scale(1.5); 
     }
 </style>
 
