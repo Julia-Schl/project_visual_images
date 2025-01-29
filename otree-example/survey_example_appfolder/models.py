@@ -45,12 +45,17 @@ class Subsession(BaseSubsession):
         # fetch all players
         players = self.get_players()
 
-        # Initialize counters for each group and question type if they don't exist yet
+        # Initialize counters per picture per group
         if 'competence_counters' not in self.session.vars:
-            self.session.vars['competence_counters'] = [0, 0, 0, 0]  # One counter for each group
+            self.session.vars['competence_counters'] = {group: {} for group in range(4)}  # Dictionary per group
         if 'trust_counters' not in self.session.vars:
-            self.session.vars['trust_counters'] = [0, 0, 0, 0]  # One counter for each group
+            self.session.vars['trust_counters'] = {group: {} for group in range(4)}  # Dictionary per group
 
+        # Initialize per-picture counters
+        for group, pictures in Constants.groupPictures.items():
+            for picture in pictures:
+                self.session.vars['competence_counters'][group][picture] = 0
+                self.session.vars['trust_counters'][group][picture] = 0
 
         if 1 <= self.round_number <= 10:
             # if it is the first round 
