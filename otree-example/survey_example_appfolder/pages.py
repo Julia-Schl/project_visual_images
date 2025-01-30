@@ -47,7 +47,7 @@ class Page1(Page):
 
         #get counters for the pictures 
         competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
-        print(f"State of Competence Counter for Picture{assigned_picture}: {competence_count}")
+        print(f"State of Competence Counter for Picture {assigned_picture}: {competence_count}")
         trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
         print(f"State of Trustworthiness Counter for Picture {assigned_picture}: {trustworthiness_count}")
 
