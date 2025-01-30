@@ -14,14 +14,13 @@ class Page1(Page):
     form_fields = ['popout_question_competence', 'picture_assignment']
 
     def vars_for_template(self):
-
+        
+        #these print statement displays the current state of the counter dictionary 
         print(f"\nRound {self.round_number}: Entering vars_for_template")
         print("\n=== Current State of Picture Counters ===")
-        # Printing Competence Counters with each group on its own row
         print("\nCompetence Counters:")
         for group, counters in self.session.vars['competence_counters'].items():
             print(f"Group {group}: {counters}")
-        # Printing Trustworthiness Counters with each group on its own row
         print("\nTrustworthiness Counters:")
         for group, counters in self.session.vars['trust_counters'].items():
             print(f"Group {group}: {counters}")
@@ -31,29 +30,26 @@ class Page1(Page):
         if self.player.time_on_page_start == "":
             self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # Fetch the group_pictures from session.vars
+        #fetch the group_pictures from session.vars
         group_pictures = self.session.vars.get('group_pictures', {})
 
-        # Access the available pictures for the current player's group
+        #fetch currently available pictures 
         player_group = self.player.group_assignment
         available_pictures = group_pictures.get(player_group, [])
-        
 
         # Get the assigned picture
         assigned_picture = self.player.picture_assignment
-        print(f"Pic 1: {assigned_picture}")
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
         #convert assigned pictures to string for further use
         assigned_picture = str(assigned_picture)
-        print(f"Pic 2: {assigned_picture}")
 
-        # Get counters for this specific picture
+        #get counters for the pictures 
         competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
-        print(f"Comp: {competence_count}")
+        print(f"State of Competence Counter: {competence_count}")
         trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
-        print(trustworthiness_count)
+        print(f"State of Trustworthiness Counter: {trustworthiness_count}")
 
         # Determine the maximum limit for each question
         limit =1
@@ -91,7 +87,7 @@ class Page1(Page):
             # Increment the group's trustworthiness counter in session.vars
             self.session.vars['trust_counters'][player_group][assigned_picture] += 1
 
-        # Send the variables to the HTML page
+        #send variables to html 
         return {
             'group_pictures': available_pictures,
             'assigned_picture': assigned_picture,
