@@ -15,6 +15,18 @@ class Page1(Page):
 
     def vars_for_template(self):
 
+        print(f"\nRound {self.round_number}: Entering vars_for_template")
+        print("\n=== Current State of Picture Counters ===")
+        # Printing Competence Counters with each group on its own row
+        print("\nCompetence Counters:")
+        for group, counters in self.session.vars['competence_counters'].items():
+            print(f"Group {group}: {counters}")
+        # Printing Trustworthiness Counters with each group on its own row
+        print("\nTrustworthiness Counters:")
+        for group, counters in self.session.vars['trust_counters'].items():
+            print(f"Group {group}: {counters}")
+        print("========================================\n")
+
         # Set the start time if it's not already set (this happens on the first visit)
         if self.player.time_on_page_start == "":
             self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -25,44 +37,46 @@ class Page1(Page):
         # Access the available pictures for the current player's group
         player_group = self.player.group_assignment
         available_pictures = group_pictures.get(player_group, [])
+        
 
         # Get the assigned picture
-        assigned_picture = self.player.picture_assignment 
-
+        assigned_picture = self.player.picture_assignment
+        print(f"Pic 1: {assigned_picture}")
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
+        #convert assigned pictures to string for further use
+        assigned_picture = str(assigned_picture)
+        print(f"Pic 2: {assigned_picture}")
+
         # Get counters for this specific picture
-        competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture, 0)
-        trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture, 0)
+        competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
+        print(f"Comp: {competence_count}")
+        trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
+        print(trustworthiness_count)
 
         # Determine the maximum limit for each question
-        limit = 125
-
-        # Ensure we only select pictures that still need ratings
-        available_pictures = [
-            pic for pic in Constants.groupPictures[player_group]
-            if self.session.vars['competence_counters'][player_group][pic] < limit
-               or self.session.vars['trust_counters'][player_group][pic] < limit
-        ]
-
-        if not available_pictures:
-            assigned_picture = None  # No more pictures left to rate
-            selected_question = None  # No more questions should be assigned
-        else:
-            assigned_picture = random.choice(available_pictures)
+        limit =1
 
         # Randomize which question to show based on the limits
         if competence_count < limit and trustworthiness_count < limit:
             # Both questions are still within the limit, so randomize
             question_set = ['competence', 'trustworthiness']
             selected_question = random.choice(question_set)
+
+        #catch potetial error if both counter reach the limit
+        elif competence_count >= limit and trustworthiness_count >= limit:
+            question_set = ['competence', 'trustworthiness']
+            selected_question = random.choice(question_set)
+            print ("help")
+
+        #if competence counter is full only display trust
         elif competence_count >= limit:
             selected_question = 'trustworthiness'
+
+        #if turst counter is full only display competence 
         elif trustworthiness_count >= limit:
             selected_question = 'competence'
-        else:
-            selected_question = None  # No valid question remains
 
         # Set the displayed question for the player
         self.player.displayed_question = selected_question
