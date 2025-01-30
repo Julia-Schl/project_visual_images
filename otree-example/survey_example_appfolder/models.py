@@ -1,12 +1,9 @@
 from otree.api import (
     models,
-    widgets,
     BaseConstants,
     BaseSubsession,
     BaseGroup,
-    BasePlayer,
-    Currency as c,
-    currency_range,
+    BasePlayer
 )
 import random, json 
 
@@ -124,10 +121,6 @@ class Subsession(BaseSubsession):
                         group_assignment_fem = 0
                     elif p.group_assignment == 3:
                         group_assignment_fem = 1
-
-                    #assign group_assignment_fem to the player if needed
-                    p.group_assignment_fem = group_assignment_fem
-                    print(f"Group Assignment Fem: {p.group_assignment_fem}")
 
                     #initialize PicturesFemininity for each player
                     femininity_pictures[p.group_assignment_fem] = Constants.groupPictures.get(p.group_assignment_fem, [])

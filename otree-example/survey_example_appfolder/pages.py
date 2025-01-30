@@ -46,7 +46,6 @@ class Page1(Page):
                or self.session.vars['trust_counters'][player_group][pic] < limit
         ]
 
-
         if not available_pictures:
             assigned_picture = None  # No more pictures left to rate
             selected_question = None  # No more questions should be assigned
@@ -112,7 +111,6 @@ class Page2(Page):
         if self.player.time_on_page_start == "":
             self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        print(f"Player ID: {self.player.id_in_group}, Group Assignment Fem: {self.player.group_assignment_fem}")
         # Fetch the femininity pictures from session.vars
         femininity_pictures = self.session.vars.get('femininity_pictures', {})
 
