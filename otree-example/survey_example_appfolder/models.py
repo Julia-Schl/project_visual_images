@@ -1,9 +1,12 @@
 from otree.api import (
     models,
+    widgets,
     BaseConstants,
     BaseSubsession,
     BaseGroup,
-    BasePlayer
+    BasePlayer,
+    Currency as c,
+    currency_range,
 )
 import random, json 
 
@@ -67,13 +70,12 @@ class Subsession(BaseSubsession):
                     #randomly select a pciture ID form the dict 
                     random_picture = random.choice(available_pictures)
                     p.picture_assignment = random_picture 
+                    print(f"Picture in round {self.round_number}: {random_picture}")
 
                     #remove selected pic from the player dict 
                     available_pictures.remove(random_picture)
                     p.set_player_pictures({"available_pictures": available_pictures})
-
-                    #track progress of session creation 
-                    print(f"created round: {self.round_number}")
+                    print(f"state of dict in round {self.round_number}:{available_pictures}")
 
             #if it is not the first round 
             elif self.round_number > 1 and self.round_number < 11:
@@ -92,14 +94,14 @@ class Subsession(BaseSubsession):
                     if available_pictures:  # Ensure there are pictures left
                         random_picture = random.choice(available_pictures)
                         p.picture_assignment = random_picture
+                        print(f"Picture in round {self.round_number}: {random_picture}")
 
                         #remove the selected picture and update the player's available pictures
                         available_pictures.remove(random_picture)
                         p.set_player_pictures({"available_pictures": available_pictures})
-
-                    #track progress of session creation 
-                    print(f"created round: {self.round_number}")
-
+                        print(f"State of dict in round {self.round_number}: {available_pictures}")
+                    else:
+                        print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
         
         # For rounds 11-20, use PicturesFemininity
         elif 11 <= self.round_number <= 20:
@@ -123,6 +125,10 @@ class Subsession(BaseSubsession):
                     elif p.group_assignment == 3:
                         group_assignment_fem = 1
 
+                    #assign group_assignment_fem to the player if needed
+                    p.group_assignment_fem = group_assignment_fem
+                    print(f"Group Assignment Fem: {p.group_assignment_fem}")
+
                     #initialize PicturesFemininity for each player
                     femininity_pictures[p.group_assignment_fem] = Constants.groupPictures.get(p.group_assignment_fem, [])
                     available_femininity_pictures = femininity_pictures[p.group_assignment_fem][:]
@@ -131,12 +137,11 @@ class Subsession(BaseSubsession):
                     #randomly assign femininity pictures
                     random_femininity_picture = random.choice(available_femininity_pictures)
                     p.picture_assignment_femininity = random_femininity_picture
+                    print(f"Pictures in round {self.round_number}: {random_femininity_picture}")
 
                     available_femininity_pictures.remove(random_femininity_picture)
                     p.set_player_pictures({"available_femininity_pictures": available_femininity_pictures})
-
-                    #track progress of session creation 
-                    print(f"created round: {self.round_number}")
+                    print(f"State of dict in round {self.round_number}: {available_femininity_pictures}")
             
             #for round 11-20
             else:
@@ -155,13 +160,16 @@ class Subsession(BaseSubsession):
                     if available_femininity_pictures:  
                         random_femininity_picture = random.choice(available_femininity_pictures)
                         p.picture_assignment_femininity = random_femininity_picture 
+                        print(f"Pictures in round {self.round_number}: {random_femininity_picture}")
 
                         #remove the selected picture and update the player's available pictures
                         available_femininity_pictures.remove(random_femininity_picture)
                         p.set_player_pictures({"available_femininity_pictures": available_femininity_pictures})
+                        print(f"State of dict in round {self.round_number}: {available_femininity_pictures}")
+                    else:
+                        #Debugging: if the list is empty (which shouldn't happen) print this statement:
+                        print(f"No available pictures for Player {p.id_in_group} in round {self.round_number}")
 
-                    #track progress of session creation 
-                    print(f"created round: {self.round_number}")
 
 class Group(BaseGroup):
     pass
