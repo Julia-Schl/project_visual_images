@@ -26,9 +26,17 @@ class Page1(Page):
             print(f"Group {group}: {counters}")
         print("========================================\n")
 
-        # Set the start time if it's not already set (this happens on the first visit)
-        if self.player.time_on_page_start == "":
+        # Detect if the page is being visited for the first time
+        if self.player.time_on_page_start == 'NA':
             self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            reload_page = 0 
+            
+        else:
+            # If time_on_page_start already exists, it's a reload
+            reload_page = 1  
+            print("Page reload detected! Reusing stored values.")
+
+        print(f'reload_page:{reload_page}')
 
         #fetch the group_pictures from session.vars
         group_pictures = self.session.vars.get('group_pictures', {})
@@ -39,53 +47,71 @@ class Page1(Page):
 
         # Get the assigned picture
         assigned_picture = self.player.picture_assignment
+        print(f"Pic 1: {assigned_picture}")
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
         #convert assigned pictures to string for further use
         assigned_picture = str(assigned_picture)
-
-        #get counters for the pictures 
-        competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
-        print(f"State of Competence Counter for Picture {assigned_picture}: {competence_count}")
-        trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
-        print(f"State of Trustworthiness Counter for Picture {assigned_picture}: {trustworthiness_count}")
+        print(f"Pic 2: {assigned_picture}")
 
         # Determine the maximum limit for each question
         limit =1
 
-        # Randomize which question to show based on the limits
-        if competence_count < limit and trustworthiness_count < limit:
-            # Both questions are still within the limit, so randomize
-            question_set = ['competence', 'trustworthiness']
-            selected_question = random.choice(question_set)
+        # Get counters for this specific picture
+        if self.player.displayed_question == 'NA':
+            competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
+            print(f"Comp: {competence_count}")
+            trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
+            print(trustworthiness_count)
 
-        #catch potetial error if both counter reach the limit
-        elif competence_count >= limit and trustworthiness_count >= limit:
-            question_set = ['competence', 'trustworthiness']
-            selected_question = random.choice(question_set)
-            print ("help")
+            # Randomize which question to show based on the limits
+            if competence_count < limit and trustworthiness_count < limit:
+                # Both questions are still within the limit, so randomize
+                question_set = ['competence', 'trustworthiness']
+                selected_question = random.choice(question_set)
 
-        #if competence counter is full only display trust
-        elif competence_count >= limit:
-            selected_question = 'trustworthiness'
+            #catch potetial error if both counter reach the limit
+            elif competence_count >= limit and trustworthiness_count >= limit:
+                question_set = ['competence', 'trustworthiness']
+                selected_question = random.choice(question_set)
+                print ("help")
 
-        #if turst counter is full only display competence 
-        elif trustworthiness_count >= limit:
-            selected_question = 'competence'
+            #if competence counter is full only display trust
+            elif competence_count >= limit:
+                selected_question = 'trustworthiness'
 
-        # Set the displayed question for the player
-        self.player.displayed_question = selected_question
+            #if turst counter is full only display competence 
+            elif trustworthiness_count >= limit:
+                selected_question = 'competence'
 
-        # Increment the player's individual display counter
-        if selected_question == 'competence':
-            self.player.competence_question_count += 1
-            self.session.vars['competence_counters'][player_group][assigned_picture] += 1
+            # Set the displayed question for the player
+            self.player.displayed_question = selected_question
+        else: 
+            # if reload get selected question which was already saved 
+            selected_question = self.player.displayed_question
 
-        elif selected_question == 'trustworthiness':
-            self.player.trustworthiness_question_count += 1
-            # Increment the group's trustworthiness counter in session.vars
-            self.session.vars['trust_counters'][player_group][assigned_picture] += 1
+
+        if reload_page == 0: 
+            # Increment the player's individual display counter
+            if selected_question == 'competence':
+                self.player.competence_question_count += 1
+                self.session.vars['competence_counters'][player_group][assigned_picture] += 1
+
+            elif selected_question == 'trustworthiness':
+                self.player.trustworthiness_question_count += 1
+                # Increment the group's trustworthiness counter in session.vars
+                self.session.vars['trust_counters'][player_group][assigned_picture] += 1
+            
+            print(f'Comp Counter: {self.session.vars["competence_counters"][player_group][assigned_picture]}')
+            print(f'Trust Counter: {self.session.vars["trust_counters"][player_group][assigned_picture]}')
+
+        elif reload_page == 1: 
+            print('page was reloaded and counter not updated')
+            print(f'Comp Counter: {self.session.vars["competence_counters"][player_group][assigned_picture]}')
+            print(f'Trust Counter: {self.session.vars["trust_counters"][player_group][assigned_picture]}')
+
+
 
         #send variables to html 
         return {
@@ -98,7 +124,7 @@ class Page1(Page):
         }
 
     def before_next_page(self):
-        if self.player.time_on_page_start != "":
+        if self.player.time_on_page_start:
             start_time = datetime.strptime(self.player.time_on_page_start, '%Y-%m-%d %H:%M:%S')
             time_spent = datetime.now() - start_time
             self.player.time_spent_on_question = time_spent.total_seconds()
@@ -143,7 +169,7 @@ class Page2(Page):
         }
 
     def before_next_page(self):
-        if self.player.time_on_page_start != "":
+        if self.player.time_on_page_start:
             start_time = datetime.strptime(self.player.time_on_page_start, '%Y-%m-%d %H:%M:%S')
             time_spent = datetime.now() - start_time
             self.player.time_spent_on_question = time_spent.total_seconds()

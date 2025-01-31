@@ -5,6 +5,18 @@
 
 <!-- Event-Listener that displays the "Weiter"-Button only after a radio option is selected  -->
 <script>
+    window.onload = function() {
+        if (performance.getEntriesByType("navigation")[0].type === "reload") {
+            alert("Page reload is not allowed!");
+        }
+    };
+
+    window.addEventListener("beforeunload", function(event) {
+    // Prevent page reload by suppressing the event
+    event.preventDefault();
+    event.returnValue = ""; // Some browsers require this for the warning to work
+    }); 
+
     document.addEventListener("DOMContentLoaded", function() {
         // Hide the popout question initially
         const popoutQuestion = document.getElementById("popout-question");

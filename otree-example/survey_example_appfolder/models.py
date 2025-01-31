@@ -159,15 +159,15 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     #field to store JSON data as a string
-    player_pictures = models.LongStringField(initial="{}")
+    player_pictures = models.LongStringField(initial="")
 
     #variable for group assignment
-    group_assignment = models.IntegerField(initial=-1)
-    group_assignment_fem = models.IntegerField(initial=-1)
+    group_assignment = models.IntegerField(initial=-99)
+    group_assignment_fem = models.IntegerField(initial=-99)
 
     #variable for picture assignment
-    picture_assignment = models.IntegerField(initial=-1)
-    picture_assignment_femininity = models.IntegerField(initial=-1)
+    picture_assignment = models.IntegerField(initial=-99)
+    picture_assignment_femininity = models.IntegerField(initial=-99)
 
     #methods to handle JSON serialization and deserialization (should be in HelperMethods but I cant import them for some reason)
     def set_player_pictures(self, pictures_dict):
@@ -179,26 +179,25 @@ class Player(BasePlayer):
 
     #Display variables for the Survey
     popout_question_competence = models.IntegerField(
-        initial=-999,
+        initial=-99,
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"
     )
-    displayed_question = models.StringField(
-        initial='N/A',)
+    displayed_question = models.StringField(initial='NA')
 
     popout_question_femininity = models.IntegerField(
-        initial=-999,
+        initial=-99,
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Bitte bewerten Sie, wie feminin das Gesicht dieser Politikerin auf Sie wirkt."
     )
-    age_question = models.IntegerField()
+    age_question = models.IntegerField(initial=-99)
 
     # Counters for questions
     competence_question_count = models.IntegerField(initial=0)
     trustworthiness_question_count = models.IntegerField(initial=0)
 
     # Add this field to store the start time of the page
-    time_on_page_start = models.StringField(initial="")
+    time_on_page_start = models.StringField(initial='NA')
 
     # The existing time_spent_on_question field:
-    time_spent_on_question = models.FloatField(initial=0.0)
+    time_spent_on_question = models.FloatField(initial=0)
