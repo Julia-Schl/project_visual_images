@@ -62,7 +62,7 @@ def run_bots(runs, link):
     driver = build_driver()
 
     #counter for bots that skipped because they encountered an error
-    skipped_bots = 4
+    skipped_bots = 0
     #pass through the survey n times
     for i in range(runs):
         print(f"\nStarting Bot: {i}")
@@ -94,5 +94,5 @@ def run_bots(runs, link):
     #print  number of bots and the percentage of bots that where skipped
     print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
 
-link = "http://localhost:8000/join/zoziboji"
-run_bots(145, link)
+link = "http://localhost:8000/join/sefisido"
+run_bots(250, link)
