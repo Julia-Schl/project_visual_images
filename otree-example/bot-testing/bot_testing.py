@@ -62,7 +62,7 @@ def run_bots(runs, link):
     driver = build_driver()
 
     #counter for bots that skipped because they encountered an error
-    skipped_bots = 0
+    skipped_bots = 4
     #pass through the survey n times
     for i in range(runs):
         print(f"\nStarting Bot: {i}")
@@ -84,15 +84,15 @@ def run_bots(runs, link):
             print(f"Bot {i} passed successfully!")
 
         #handle ecxceptions: if one of these exceptions occur the cirrent bot is skipped 
-        # the "Not interactable" exception occurs randomly, most likely when the page takes longer than normal to  load 
+        # the "Not interactable" exception occurs randomly, most likely when the page takes longer than normal to load 
         except (NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException) as e:
             print(f"Bot {i} encountered an error and will be skipped: {e}")
             #iterate counter if an exception is encountered
             skipped_bots += 1
             #skip to next counter 
             continue
-   #print  number of bots and  
+    #print  number of bots and the percentage of bots that where skipped
     print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
 
 link = "http://localhost:8000/join/zoziboji"
-run_bots(100, link)
+run_bots(145, link)
