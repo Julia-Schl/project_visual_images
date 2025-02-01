@@ -1,39 +1,55 @@
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException
 from selenium import webdriver
-#from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import random
-import string
 import time
 
-
+'''
+All handling methods have some short waiting timers. This is so the page and the seperate buttons can load properly and so teh scrolling works as intended.
+Shorter timers will result in more exceptions occuring
+'''
+#initialize driver
 def build_driver():
     return webdriver.Chrome()
 
-
+#handle welcome page
 def welcome(driver):
     time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div/button').click()
 
+#handle Page1
 def Page1(driver):
     time.sleep(0.3)
-    radio = driver.find_elements(By.NAME,"popout_question_competence")
+
+    #access radio question 
+    radio = driver.find_elements(By.NAME, "popout_question_competence")
+    #first layer of error handling
+    if not radio:
+        raise NoSuchElementException("No radio buttons found on Page1")
+    
+    #randomly select input 
     random_input = random.randint(0, len(radio) - 1)
+    #this scrolls the page to the question. Needed so the script can access the radio button proberly 
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", radio[random_input])
     time.sleep(0.3)
+    #input for radio buttons 
     radio[random_input].click()
+
+    #click next button
     time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div[3]/div/div/button').click()
 
-
+#handle transition page
 def Transition(driver):
     time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div/button').click()
 
-
 def Page2(driver):
+    #same logic and similar code as for Page1
     time.sleep(0.3)
-    radio_fem = driver.find_elements(By.NAME,"popout_question_femininity")
+    radio_fem = driver.find_elements(By.NAME, "popout_question_femininity")
+    if not radio_fem:
+        raise NoSuchElementException("No radio buttons found on Page2")
     random_input_fem = random.randint(0, len(radio_fem) - 1)
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", radio_fem[random_input_fem])
     time.sleep(0.3)
@@ -41,37 +57,42 @@ def Page2(driver):
     time.sleep(0.3)
     driver.find_element(By.XPATH, "/html/body/div/form/div/div[4]/div/div/button").click()
 
-
-
-def run_bots(runs,link):
+#method that runs a specifieed number of bots over the pages 
+def run_bots(runs, link):
     driver = build_driver()
 
+    #counter for bots that skipped because they encountered an error
+    skipped_bots = 0
     #pass through the survey n times
     for i in range(runs):
         print(f"\nStarting Bot: {i}")
-        driver.get(link)
+        try:
+            #initialize driver and pass welcome page
+            driver.get(link)
+            welcome(driver)
+            
+            #pass Page1 10 times
+            for _ in range(10):
+                Page1(driver)
 
-        #pass welcome 
-        welcome(driver)
+            #pass Transiton  page 
+            Transition(driver)
+            
+            #pass Page2 10 times
+            for _ in range(10):
+                Page2(driver)
+            print(f"Bot {i} passed successfully!")
 
-        #pass through Page1 10 times
-        for x in range(10):
-            Page1(driver)
-            print(f"Bot {i} passed round {x+1}") 
+        #handle ecxceptions: if one of these exceptions occur the cirrent bot is skipped 
+        # the "Not interactable" exception occurs randomly, most likely when the page takes longer than normal to  load 
+        except (NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException) as e:
+            print(f"Bot {i} encountered an error and will be skipped: {e}")
+            #iterate counter if an exception is encountered
+            skipped_bots += 1
+            #skip to next counter 
+            continue
+   #print  number of bots and  
+    print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
 
-        #pass transition
-        Transition(driver)
-
-        #pass trough Page2 10 times
-        for z in range(10):
-            Page2(driver)
-            print(f"Bot {i} passed round {z+11}") 
-
-        print(f"Bot {i} passed successfully!")
-
-    print("All Bots passed through the survey!")   
-
-#set link for bots and number of times they should run trough it 
-link = "http://localhost:8000/join/jumakuro"
-#run 5 bots
-run_bots(5,link)
+link = "http://localhost:8000/join/zoziboji"
+run_bots(100, link)
