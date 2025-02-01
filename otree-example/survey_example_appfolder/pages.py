@@ -144,7 +144,7 @@ class Page2(Page):
     def vars_for_template(self):
 
         # Set the start time if it's not already set (this happens on the first visit)
-        if self.player.time_on_page_start == "":
+        if self.player.time_on_page_start == "NA":
             self.player.time_on_page_start = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # Fetch the femininity pictures from session.vars
