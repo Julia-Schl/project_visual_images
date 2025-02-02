@@ -7,15 +7,9 @@
 <script>
     window.onload = function() {
         if (performance.getEntriesByType("navigation")[0].type === "reload") {
-            alert("Page reload is not allowed!");
+            window.location.href = window.location.href;
         }
     };
-
-    window.addEventListener("beforeunload", function(event) {
-    // Prevent page reload by suppressing the event
-    event.preventDefault();
-    event.returnValue = ""; // Some browsers require this for the warning to work
-    }); 
 
     document.addEventListener("DOMContentLoaded", function() {
         // Hide the popout question initially
