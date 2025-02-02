@@ -29,6 +29,7 @@ def Page1(driver):
     
     #randomly select input 
     random_input = random.randint(0, len(radio) - 1)
+    
     #this scrolls the page to the question. Needed so the script can access the radio button proberly 
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", radio[random_input])
     time.sleep(0.3)
@@ -75,7 +76,7 @@ def run_bots(runs, link):
             for _ in range(10):
                 Page1(driver)
 
-            #pass Transiton  page 
+            #pass Transiton page 
             Transition(driver)
             
             #pass Page2 10 times
@@ -89,7 +90,7 @@ def run_bots(runs, link):
             print(f"Bot {i} encountered an error and will be skipped: {e}")
             #iterate counter if an exception is encountered
             skipped_bots += 1
-            #skip to next counter 
+            #skip to next bot 
             continue
     #print  number of bots and the percentage of bots that where skipped
     print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
