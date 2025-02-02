@@ -5,6 +5,8 @@ import random
 from datetime import datetime
 
 class Welcome(Page):
+    form_model = Player
+    form_fields = ['screen_height', 'screen_width', 'operating_system']
     def is_displayed(self):
         return self.round_number == 1
 

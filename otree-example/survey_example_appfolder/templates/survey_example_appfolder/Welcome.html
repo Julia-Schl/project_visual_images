@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+<!-- Hidden form fields (not visible to participants) -->
+<input type="hidden" name="screen_width">
+<input type="hidden" name="screen_height">
+<input type="hidden" name="operating_system">
+
 <!-- Intro Text -->
 <p style="font-size: 18px;">
     Nun möchten wir uns einem anderen Thema zuwenden. <br> <br>
@@ -27,15 +32,26 @@
 
 <!-- paper for the color selection: https://ieeexplore.ieee.org/abstract/document/6875961-->
 
-
-
-
 <!-- Continue Button -->
 <br> 
 <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
     <button class="otree-btn-next btn btn-primary">Weiter</button>
 </div>
+{% endblock %}
 
+{% block scripts %}
+<script>
+    // Detect operating system
+    document.querySelector("input[name='screen_width']").value = screen.width;
+    document.querySelector("input[name='screen_height']").value = screen.height;
+    var os = -999;
+    var ua = navigator.userAgent;
+    if (ua.indexOf("Win") !== -1) os = 1; // Windows
+    if (ua.indexOf("Mac") !== -1) os = 2; // MacOS
+    if (ua.indexOf("Linux") !== -1) os = 3; // Linux
+    if (ua.indexOf("Android") !== -1) os = 4; // Android
+    if (ua.indexOf("like Mac") !== -1) os = 5; // iOS
+    document.querySelector("input[name='operating_system']").value = os;
 
-
+</script>
 {% endblock %}

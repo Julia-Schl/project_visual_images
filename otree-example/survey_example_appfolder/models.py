@@ -201,3 +201,7 @@ class Player(BasePlayer):
 
     # The existing time_spent_on_question field:
     time_spent_on_question = models.FloatField(initial=0)
+
+    screen_width = models.IntegerField(blank=True, null=True)
+    screen_height = models.IntegerField(blank=True, null=True)
+    operating_system = models.StringField(blank=True, null=True)
