@@ -56,7 +56,7 @@ class Page1(Page):
         print(f"Pic 2: {assigned_picture}")
 
         # Determine the maximum limit for each question
-        limit =1
+        limit = 125
 
         # Get counters for this specific picture
         if self.player.displayed_question == 'NA':
@@ -75,7 +75,7 @@ class Page1(Page):
             elif competence_count >= limit and trustworthiness_count >= limit:
                 question_set = ['competence', 'trustworthiness']
                 selected_question = random.choice(question_set)
-                print ("help")
+                print ("Both limits reached! Defaulting to random assignment of questions...")
 
             #if competence counter is full only display trust
             elif competence_count >= limit:
