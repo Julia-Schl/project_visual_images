@@ -178,7 +178,7 @@ class Player(BasePlayer):
         return json.loads(self.player_pictures)
 
     #Display variables for the Survey
-    popout_question_competence = models.IntegerField(
+    comp_trust = models.IntegerField(
         initial=-99,
         choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (-1, 'Keine Angabe')],
         label="Wie schätzen Sie die Kompetenz dieser Politikerin ein?"

@@ -13,20 +13,9 @@ class Welcome(Page):
 
 class Page1(Page):
     form_model = 'player'
-    form_fields = ['popout_question_competence', 'picture_assignment']
+    form_fields = ['comp_trust', 'picture_assignment']
 
     def vars_for_template(self):
-        
-        #these print statement displays the current state of the counter dictionary 
-        print(f"\nRound {self.round_number}: Entering vars_for_template")
-        print("\n=== Current State of Picture Counters ===")
-        print("\nCompetence Counters:")
-        for group, counters in self.session.vars['competence_counters'].items():
-            print(f"Group {group}: {counters}")
-        print("\nTrustworthiness Counters:")
-        for group, counters in self.session.vars['trust_counters'].items():
-            print(f"Group {group}: {counters}")
-        print("========================================\n")
 
         # Detect if the page is being visited for the first time
         if self.player.time_on_page_start == 'NA':
@@ -36,9 +25,6 @@ class Page1(Page):
         else:
             # If time_on_page_start already exists, it's a reload
             reload_page = 1  
-            print("Page reload detected! Reusing stored values.")
-
-        print(f'reload_page:{reload_page}')
 
         #fetch the group_pictures from session.vars
         group_pictures = self.session.vars.get('group_pictures', {})
@@ -49,13 +35,13 @@ class Page1(Page):
 
         # Get the assigned picture
         assigned_picture = self.player.picture_assignment
-        print(f"Pic 1: {assigned_picture}")
+        print(f"Current Picture: {assigned_picture}")
+
         # Construct the image path dynamically
         image_path = f"/static/Group_{self.player.group_assignment}/P_{assigned_picture}.png"
 
         #convert assigned pictures to string for further use
         assigned_picture = str(assigned_picture)
-        print(f"Pic 2: {assigned_picture}")
 
         # Determine the maximum limit for each question
         limit = 125
@@ -63,9 +49,7 @@ class Page1(Page):
         # Get counters for this specific picture
         if self.player.displayed_question == 'NA':
             competence_count = self.session.vars['competence_counters'][player_group].get(assigned_picture)
-            print(f"Comp: {competence_count}")
             trustworthiness_count = self.session.vars['trust_counters'][player_group].get(assigned_picture)
-            print(trustworthiness_count)
 
             # Randomize which question to show based on the limits
             if competence_count < limit and trustworthiness_count < limit:

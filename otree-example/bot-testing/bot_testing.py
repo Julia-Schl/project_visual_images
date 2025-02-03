@@ -19,7 +19,7 @@ def welcome(driver):
 def Page1(driver):
 
     #access radio question 
-    radio = driver.find_elements(By.NAME, "popout_question_competence")
+    radio = driver.find_elements(By.NAME, "comp_trust")
     #first layer of error handling
     if not radio:
         raise NoSuchElementException("No radio buttons found on Page1")
@@ -88,5 +88,5 @@ def run_bots(runs, link):
     #print  number of bots and the percentage of bots that where skipped
     print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
 
-link = "http://localhost:8000/join/niminelu"
-run_bots(50, link)
+link = "http://localhost:8000/join/hokafura"
+run_bots(10, link)

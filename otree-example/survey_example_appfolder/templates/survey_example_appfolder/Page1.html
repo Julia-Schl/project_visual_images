@@ -15,7 +15,7 @@
         // Hide the popout question initially
         const popoutQuestion = document.getElementById("popout-question");
         const weiterButton = document.getElementById("weiter-button");
-        const radioButtons = document.querySelectorAll("input[name='popout_question_competence']");
+        const radioButtons = document.querySelectorAll("input[name='comp_trust']");
 
         weiterButton.style.display = "none";
 
@@ -78,11 +78,11 @@
                             Überhaupt nicht vertrauenswürdig
                             {% endif %}
                         </td>
-                        <td><input type="radio" name="popout_question_competence" value="1" {% if player.popout_question_competence == 1 %} checked {% endif %} class="large-radio"></td>
-                        <td><input type="radio" name="popout_question_competence" value="2" {% if player.popout_question_competence == 2 %} checked {% endif %} class="large-radio"></td>
-                        <td><input type="radio" name="popout_question_competence" value="3" {% if player.popout_question_competence == 3 %} checked {% endif %} class="large-radio"></td>
-                        <td><input type="radio" name="popout_question_competence" value="4" {% if player.popout_question_competence == 4 %} checked {% endif %} class="large-radio"></td>
-                        <td><input type="radio" name="popout_question_competence" value="5" {% if player.popout_question_competence == 5 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="1" {% if player.comp_trust == 1 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="2" {% if player.comp_trust == 2 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="3" {% if player.comp_trust == 3 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="4" {% if player.comp_trust == 4 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="5" {% if player.comp_trust == 5 %} checked {% endif %} class="large-radio"></td>
                         <td style="text-align: left; font-weight: bold;">
                             {% if displayed_question == 'competence' %}
                             Sehr kompetent
@@ -90,14 +90,14 @@
                             Sehr vertrauens-<br>würdig
                             {% endif %}
                         </td>
-                        <td><input type="radio" name="popout_question_competence" value="-1" {% if player.popout_question_competence == -1 %} checked {% endif %} class="large-radio"></td>
+                        <td><input type="radio" name="comp_trust" value="-1" {% if player.comp_trust == -1 %} checked {% endif %} class="large-radio"></td>
                     </tr>
                 </tbody>
             </table>
 
             <!-- Fix "Weiter"-Button to the bottom right  -->
             <div class="form-errors">
-                {{ formfield_errors 'popout_question_competence' }}
+                {{ formfield_errors 'comp_trust' }}
                 <br> 
                 <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
                     <button id="weiter-button" class="otree-btn-next btn btn-primary">Weiter</button>
@@ -109,7 +109,7 @@
 <script>
     setTimeout(function() {
         document.getElementById("popout-question").style.display = "block";
-    }, 0);  
+    }, 3000);  
 </script>
 
 <!-- Increase size of radio button  -->
