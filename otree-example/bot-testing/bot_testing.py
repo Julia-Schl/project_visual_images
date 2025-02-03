@@ -5,8 +5,7 @@ import random
 import time
 
 '''
-All handling methods have some short waiting timers. This is so the page and the seperate buttons can load properly and so teh scrolling works as intended.
-Shorter timers will result in more exceptions occuring
+Both Page handlers have a short sleept timer to allow time for scrolling. Decreasing this timer will result in more exceptions occuring
 '''
 #initialize driver
 def build_driver():
@@ -14,12 +13,10 @@ def build_driver():
 
 #handle welcome page
 def welcome(driver):
-    time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div/button').click()
 
 #handle Page1
 def Page1(driver):
-    time.sleep(0.3)
 
     #access radio question 
     radio = driver.find_elements(By.NAME, "popout_question_competence")
@@ -37,17 +34,14 @@ def Page1(driver):
     radio[random_input].click()
 
     #click next button
-    time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div[3]/div/div/button').click()
 
 #handle transition page
 def Transition(driver):
-    time.sleep(0.3)
     driver.find_element(By.XPATH, '/html/body/div/form/div/div/button').click()
 
 def Page2(driver):
     #same logic and similar code as for Page1
-    time.sleep(0.3)
     radio_fem = driver.find_elements(By.NAME, "popout_question_femininity")
     if not radio_fem:
         raise NoSuchElementException("No radio buttons found on Page2")
@@ -55,7 +49,6 @@ def Page2(driver):
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", radio_fem[random_input_fem])
     time.sleep(0.3)
     radio_fem[random_input_fem].click()
-    time.sleep(0.3)
     driver.find_element(By.XPATH, "/html/body/div/form/div/div[4]/div/div/button").click()
 
 #method that runs a specifieed number of bots over the pages 
@@ -95,5 +88,5 @@ def run_bots(runs, link):
     #print  number of bots and the percentage of bots that where skipped
     print(f"{runs} Bots passed through the survey! Total skipped bots: {skipped_bots} ({(skipped_bots/runs) * 100:.2f}% of Bots)")
 
-link = "http://localhost:8000/join/sefisido"
-run_bots(250, link)
+link = "http://localhost:8000/join/niminelu"
+run_bots(50, link)
